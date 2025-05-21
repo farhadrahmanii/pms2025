@@ -43,7 +43,6 @@ return [
                 // Roles list
                 'list' => [
                     'employee' => 'Employee',
-                    'customer' => 'Customer',
                     'administrator' => 'Administrator'
                 ],
 
