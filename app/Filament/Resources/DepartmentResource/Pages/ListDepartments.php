@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\DepartmentResource\Pages;
 
 use App\Filament\Resources\DepartmentResource;
+use App\Models\Department;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ListRecords;
 
@@ -16,4 +17,6 @@ class ListDepartments extends ListRecords
             Actions\CreateAction::make(),
         ];
     }
+
+    
 }
