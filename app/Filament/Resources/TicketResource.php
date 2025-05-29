@@ -297,7 +297,7 @@ class TicketResource extends Resource
 
             Tables\Columns\TextColumn::make('created_at')
                 ->label(__('Created at'))
-                ->dateTime()
+                ->formatStateUsing(fn($record) => $record->created_at->diffForHumans())
                 ->sortable()
                 ->searchable(),
         ]);
@@ -345,6 +345,28 @@ class TicketResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('approve')
+                    ->label(__('Approve'))
+                    ->color('success')
+                    ->icon('heroicon-o-check')
+                    ->visible(fn($record) => auth()->user()->can('Update ticket') && $record->approved !== 1 && $record->responsible_id !== auth()->user()->id)
+                    ->action(fn($record) => $record->update([
+                        $record->approved_by = auth()->user()->id,
+                        $record->approved = 1,
+                    ]))
+                    ->after(fn($record) => $record->notify('success', __('Ticket approved successfully.')))
+                    ->after(fn($record) => $record->refresh()),
+                Tables\Actions\Action::make('Reject')
+                    ->label(__('reject'))
+                    ->color('danger')
+                    ->icon('heroicon-o-x-circle')
+                    ->visible(fn($record) => auth()->user()->can('Update ticket') && $record->approved !== 0 && $record->responsible_id !== auth()->user()->id)
+                    ->action(fn($record) => $record->update([
+                        $record->approved_by = auth()->user()->id,
+                        $record->approved = 0,
+                    ]))
+                    ->after(fn($record) => $record->notify('success', __('Ticket approved successfully.')))
+                    ->after(fn($record) => $record->refresh()),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

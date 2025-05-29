@@ -20,9 +20,19 @@ class Ticket extends Model implements HasMedia
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
-        'name', 'content', 'owner_id', 'responsible_id',
-        'status_id', 'project_id', 'code', 'order', 'type_id',
-        'priority_id', 'estimation', 'epic_id', 'sprint_id'
+        'name',
+        'content',
+        'owner_id',
+        'responsible_id',
+        'status_id',
+        'project_id',
+        'code',
+        'order',
+        'type_id',
+        'priority_id',
+        'estimation',
+        'epic_id',
+        'sprint_id'
     ];
 
     public static function boot()
@@ -220,5 +230,17 @@ class Ticket extends Model implements HasMedia
         return new Attribute(
             get: fn() => $this->estimationProgress
         );
+    }
+
+    /**
+     * Approve the ticket by setting its status to 'approved'.
+     */
+    public function approve()
+    {
+        $approvedStatus = \App\Models\TicketStatus::where('name', 'approved')->first();
+        if ($approvedStatus) {
+            $this->status_id = $approvedStatus->id;
+            $this->save();
+        }
     }
 }

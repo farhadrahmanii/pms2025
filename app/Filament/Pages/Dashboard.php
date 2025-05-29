@@ -27,10 +27,14 @@ class Dashboard extends BasePage
     protected function getActions(): array
     {
         return [
-            Action::make('create-project')
-                ->label(__('Create project'))
-                ->url(fn(): string => route('filament.resources.projects.create'))
-                ->icon('heroicon-o-plus-circle'),
+            ActionGroup::make([
+                Action::make('daily-report')
+                    ->label(__('Daily Report'))
+                    ->url('/daily-report')
+                    ->icon('heroicon-o-plus-circle')
+                // ->authorize('daily Report')
+                ,
+            ]),
             Action::make('list-projects')
                 ->label(__('Show all projects'))
                 ->color('secondary')
@@ -57,6 +61,7 @@ class Dashboard extends BasePage
                 ->color('secondary')
                 ->url(fn(): string => route('filament.resources.users.index'))
                 ->icon('heroicon-o-view-list'),
+
         ];
     }
 

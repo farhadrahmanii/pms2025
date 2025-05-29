@@ -27,7 +27,7 @@ class ListTickets extends ListRecords
     {
         return parent::getTableQuery()
             ->where(function ($query) {
-                return $query->where('owner_id', auth()->user()->id)
+                return $query->where('owner_id', auth()->user()->id) 
                     ->orWhere('responsible_id', auth()->user()->id)
                     ->orWhereHas('project', function ($query) {
                         return $query->where('owner_id', auth()->user()->id)

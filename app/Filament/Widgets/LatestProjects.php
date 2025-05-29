@@ -7,6 +7,7 @@ use Filament\Tables;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\HtmlString;
+use Filament\Pages\Actions\Action;
 
 class LatestProjects extends BaseWidget
 {
@@ -25,6 +26,20 @@ class LatestProjects extends BaseWidget
     public static function canView(): bool
     {
         return auth()->user()->can('List projects');
+    }
+    protected function getActions(): array
+    {
+        return [
+            Action::make('daily-report')
+                ->label(__('Daily Report'))
+                ->url('/daily-report')
+                ->icon('heroicon-o-plus-circle'),
+            Action::make('list-projects')
+                ->label(__('Show all projects'))
+                ->color('secondary')
+                ->url(fn(): string => route('filament.resources.projects.index'))
+                ->icon('heroicon-o-view-list'),
+        ];
     }
 
     protected function isTablePaginationEnabled(): bool

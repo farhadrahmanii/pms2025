@@ -149,6 +149,28 @@ class ViewTicket extends ViewRecord implements HasForms
                     && $this->record->hours()->count()
                 ))
                 ->color('secondary'),
+            Actions\Action::make('approve')
+                ->label(__('Approve'))
+                ->color('success')
+                ->icon('heroicon-o-check')
+                ->visible(fn() => auth()->user()->can('Update ticket') && $this->record->approved !== 1)
+                ->action(function () {
+                    $this->record->approved = 1;
+                    $this->record->save();
+                    $this->notify('success', __('Ticket approved successfully.'));
+                    $this->record->refresh();
+                }),
+            Actions\Action::make('Reject')
+                ->label(__('reject'))
+                ->color('danger')
+                ->icon('heroicon-o-x-circle')
+                ->visible(fn() => auth()->user()->can('Update ticket') && $this->record->approved === 1)
+                ->action(function () {
+                    $this->record->approved = 0;
+                    $this->record->save();
+                    $this->notify('danger', __('Rejected successfully.'));
+                    $this->record->refresh();
+                }),
         ];
     }
 

@@ -62,6 +62,13 @@ class UserResource extends Resource
                                         . ',id,deleted_at,NULL'
                                     )
                                     ->maxLength(255),
+                                Forms\Components\TextInput::make('password')
+                                    ->label(__('Password'))
+                                    ->password()
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->helperText('Leave blank if you don\'t want to change the password')
+                                ,
 
                                 Forms\Components\CheckboxList::make('roles')
                                     ->label(__('Permission roles'))
@@ -95,6 +102,10 @@ class UserResource extends Resource
                     ->label(__('Full name'))
                     ->sortable()
                     ->searchable(),
+                Tables\Columns\TagsColumn::make('departments.name')
+                    ->label(__('Department'))
+                    ->sortable()
+                    ->searchable(),
 
                 Tables\Columns\TextColumn::make('email')
                     ->label(__('Email address'))
@@ -105,31 +116,28 @@ class UserResource extends Resource
                     ->label(__('Roles'))
                     ->limit(2),
 
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->label(__('Email verified at'))
-                    ->dateTime()
-                    ->sortable()
-                    ->searchable(),
 
-                Tables\Columns\TextColumn::make('socials')
-                    ->label(__('Linked social networks'))
-                    ->view('partials.filament.resources.social-icon'),
+                // Tables\Columns\TextColumn::make('socials')
+                //     ->label(__('Linked social networks'))
+                //     ->view('partials.filament.resources.social-icon'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label(__('Created at'))
                     ->dateTime()
                     ->sortable()
+                    ->hidden()
                     ->searchable(),
             ])
             ->filters([
-                //
+
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()->authorize('Delete user'),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                // Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 

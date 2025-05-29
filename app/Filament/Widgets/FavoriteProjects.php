@@ -6,7 +6,7 @@ use Filament\Pages\Actions\Action;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Card;
 use Illuminate\Support\HtmlString;
-
+use Filament\Pages\Actions\ActionGroup;
 class FavoriteProjects extends BaseWidget
 {
     protected static ?int $sort = 1;
@@ -27,7 +27,17 @@ class FavoriteProjects extends BaseWidget
     }
     protected function getActions(): array
     {
-        return [];
+        return [
+            Action::make('daily-report')
+                ->label(__('Daily Report'))
+                ->url('/daily-report')
+                ->icon('heroicon-o-plus-circle'),
+            Action::make('list-projects')
+                ->label(__('Show all projects'))
+                ->color('secondary')
+                ->url(fn(): string => route('filament.resources.projects.index'))
+                ->icon('heroicon-o-view-list'),
+        ];
     }
 
     protected function getCards(): array
