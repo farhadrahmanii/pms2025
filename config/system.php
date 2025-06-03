@@ -49,7 +49,6 @@ return [
                 // Roles colors
                 'colors' => [
                     'primary' => 'employee',
-                    'warning' => 'customer',
                     'danger' => 'administrator'
                 ],
 
