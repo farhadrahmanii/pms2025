@@ -153,7 +153,7 @@ class ViewTicket extends ViewRecord implements HasForms
                 ->label(__('Approve'))
                 ->color('success')
                 ->icon('heroicon-o-check')
-                ->visible(fn() => auth()->user()->can('Update ticket') && $this->record->approved !== 1)
+                ->visible(fn() => $this->record->approved !== 1 && auth()->user()->hasRole('Default role'))
                 ->action(function () {
                     $this->record->approved = 1;
                     $this->record->save();
@@ -164,7 +164,7 @@ class ViewTicket extends ViewRecord implements HasForms
                 ->label(__('reject'))
                 ->color('danger')
                 ->icon('heroicon-o-x-circle')
-                ->visible(fn() => auth()->user()->can('Update ticket') && $this->record->approved === 1)
+                ->visible(fn() => auth()->user()->hasRole('Default role') && $this->record->approved === 1)
                 ->action(function () {
                     $this->record->approved = 0;
                     $this->record->save();

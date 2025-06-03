@@ -14,9 +14,13 @@ use App\Filament\Widgets\UserTimeLogged;
 use Filament\Pages\Actions\Action;
 use Filament\Pages\Actions\ActionGroup;
 use Filament\Pages\Dashboard as BasePage;
-
+use JibayMcs\FilamentTour\Tour\HasTour;
+use JibayMcs\FilamentTour\Tour\Step;
+use JibayMcs\FilamentTour\Tour\Tour;
 class Dashboard extends BasePage
 {
+    use HasTour;
+
     protected static bool $shouldRegisterNavigation = false;
 
     protected function getColumns(): int|array
@@ -77,6 +81,22 @@ class Dashboard extends BasePage
             TicketsByType::class,
             TicketTimeLogged::class,
             UserTimeLogged::class
+        ];
+    }
+
+    public function tours(): array
+    {
+        return [
+            Tour::make('dashboard')
+                ->steps(
+                    Step::make()
+                        ->title("Welcome to your Project Management System!"),
+                    Step::make('.fi-avatar')
+                        ->title('Woaw ! Here is your avatar !')
+                        ->description('You look nice !')
+                        ->icon('heroicon-o-user-circle')
+                        ->iconColor('primary')
+                ),
         ];
     }
 }

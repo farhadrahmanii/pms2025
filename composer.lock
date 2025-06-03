@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "13b29f4fa66bd9bc570ad4b562496d8a",
+    "content-hash": "f568adcc51b49d2443956c7aa2ba6ddb",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -196,6 +196,77 @@
                 "source": "https://github.com/askerakbar/gpt-trix-editor/tree/1.0.1"
             },
             "time": "2023-04-15T17:03:52+00:00"
+        },
+        {
+            "name": "awcodes/filament-quick-create",
+            "version": "v2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/awcodes/filament-quick-create.git",
+                "reference": "6e358bc629f2787558ed31afe0364365ab6ef0d1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/awcodes/filament-quick-create/zipball/6e358bc629f2787558ed31afe0364365ab6ef0d1",
+                "reference": "6e358bc629f2787558ed31afe0364365ab6ef0d1",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^2.0",
+                "illuminate/contracts": "^9.0|^10.0",
+                "php": "^8.0",
+                "spatie/laravel-package-tools": "^1.9.2"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^6.0|^7.0",
+                "nunomaduro/larastan": "^2.0.1",
+                "orchestra/testbench": "^7.0|^8.0",
+                "pestphp/pest": "^1.21",
+                "pestphp/pest-plugin-laravel": "^1.1",
+                "pestphp/pest-plugin-livewire": "^1.0",
+                "pestphp/pest-plugin-parallel": "^0.3",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^9.5|^10.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "FilamentQuickCreate\\FilamentQuickCreateServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "FilamentQuickCreate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adam Weston",
+                    "email": "awcodes1@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Plugin for Filament Admin that adds a dropdown menu to the header to quickly create new items.",
+            "keywords": [
+                "filament",
+                "framework",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/awcodes/filament-quick-create/issues",
+                "source": "https://github.com/awcodes/filament-quick-create/tree/v2.1.1"
+            },
+            "time": "2023-03-02T14:06:12+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -3321,6 +3392,229 @@
                 "source": "https://github.com/jeffgreco13/filament-breezy/tree/v1.5.10"
             },
             "time": "2024-01-31T15:40:42+00:00"
+        },
+        {
+            "name": "jeremykendall/php-domain-parser",
+            "version": "6.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeremykendall/php-domain-parser.git",
+                "reference": "98401b32371fc1a75d93d4653d311b38e71f0d82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeremykendall/php-domain-parser/zipball/98401b32371fc1a75d93d4653d311b38e71f0d82",
+                "reference": "98401b32371fc1a75d93d4653d311b38e71f0d82",
+                "shasum": ""
+            },
+            "require": {
+                "ext-filter": "*",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.65.0",
+                "guzzlehttp/guzzle": "^7.9.2",
+                "guzzlehttp/psr7": "^1.6 || ^2.7.0",
+                "phpstan/phpstan": "^1.12.13",
+                "phpstan/phpstan-phpunit": "^1.4.2",
+                "phpstan/phpstan-strict-rules": "^1.6.1",
+                "phpunit/phpunit": "^10.5.15 || ^11.5.1",
+                "psr/http-factory": "^1.1.0",
+                "psr/simple-cache": "^1.0.1 || ^2.0.0",
+                "symfony/cache": "^v5.0.0 || ^6.4.16",
+                "symfony/var-dumper": "^v6.4.18 || ^7.2"
+            },
+            "suggest": {
+                "league/uri": "To parse and extract the host from an URL using a RFC3986/RFC3987 URI parser",
+                "psr/http-client-implementation": "To use the storage functionality which depends on PSR-18",
+                "psr/http-factory-implementation": "To use the storage functionality which depends on PSR-17",
+                "psr/simple-cache-implementation": "To use the storage functionality which depends on PSR-16",
+                "rowbot/url": "To parse and extract the host from an URL using a  WHATWG URL parser",
+                "symfony/polyfill-intl-idn": "to handle IDN host via the Symfony polyfill if ext-intl is not present"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "6.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pdp\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Kendall",
+                    "homepage": "https://about.me/jeremykendall",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Ignace Nyamagana Butera",
+                    "homepage": "https://nyamsprod.com",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/jeremykendall/php-domain-parser/graphs/contributors"
+                }
+            ],
+            "description": "Public Suffix List and IANA Root Zone Database based Domain parsing implemented in PHP.",
+            "homepage": "https://github.com/jeremykendall/php-domain-parser",
+            "keywords": [
+                "PSL",
+                "Public Suffix List",
+                "Top Level Domains",
+                "domain parsing",
+                "iana",
+                "icann",
+                "idn",
+                "tld"
+            ],
+            "support": {
+                "issues": "https://github.com/jeremykendall/php-domain-parser/issues",
+                "source": "https://github.com/jeremykendall/php-domain-parser"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/nyamsprod",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-04-26T11:19:48+00:00"
+        },
+        {
+            "name": "laravel-ready/license-server",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-ready/license-server.git",
+                "reference": "08a02112d003f594f3843a232dd14cfeea0591d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-ready/license-server/zipball/08a02112d003f594f3843a232dd14cfeea0591d5",
+                "reference": "08a02112d003f594f3843a232dd14cfeea0591d5",
+                "shasum": ""
+            },
+            "require": {
+                "ext-filter": "*",
+                "ext-intl": "*",
+                "ext-json": "*",
+                "illuminate/support": "^11.0 || ^10.0 || ^9.0",
+                "jeremykendall/php-domain-parser": "^6.3.0",
+                "laravel-ready/ultimate-support": "^2.0 || ^1.1",
+                "laravel/sanctum": "^4.0 || ^3.2 || ^3.0 || ^2.1",
+                "php": "^8.2 || ^8.1 || ^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6",
+                "orchestra/testbench": "^7.42",
+                "phpunit/phpunit": "^9.6"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "LicenseServer": "LaravelReady\\LicenseServer\\Facades\\LicenseServer"
+                    },
+                    "providers": [
+                        "LaravelReady\\LicenseServer\\LicenseServerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelReady\\LicenseServer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "EgoistDeveloper",
+                    "email": "epsilonelittr@gmail.com"
+                }
+            ],
+            "description": "License server for Laravel",
+            "keywords": [
+                "laravel",
+                "license",
+                "license-manager",
+                "license-server"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-ready/license-server/issues",
+                "source": "https://github.com/laravel-ready/license-server"
+            },
+            "time": "2024-06-04T17:08:49+00:00"
+        },
+        {
+            "name": "laravel-ready/ultimate-support",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-ready/ultimate-support.git",
+                "reference": "70a8f8fe390d449c2b4423bd0cc49b0fb08daa06"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-ready/ultimate-support/zipball/70a8f8fe390d449c2b4423bd0cc49b0fb08daa06",
+                "reference": "70a8f8fe390d449c2b4423bd0cc49b0fb08daa06",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^11.8 || ^10.0 || ^9.0",
+                "php": "^8.2 || ^8.1 || ^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.6.12",
+                "orchestra/testbench": "^v7.42.0",
+                "phpunit/phpunit": "^10.5.20"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "UltimateSupport": "LaravelReady\\UltimateSupport\\Facades\\UltimateSupport"
+                    },
+                    "providers": [
+                        "LaravelReady\\UltimateSupport\\UltimateSupportServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LaravelReady\\UltimateSupport\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "EgoistDeveloper",
+                    "email": "epsilonelittr@gmail.com"
+                }
+            ],
+            "description": "A few useful reusable support package for Laravel",
+            "keywords": [
+                "laravel",
+                "support",
+                "ultimate-support"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-ready/ultimate-support/issues",
+                "source": "https://github.com/laravel-ready/ultimate-support"
+            },
+            "time": "2024-05-27T13:50:19+00:00"
         },
         {
             "name": "laravel/framework",
@@ -11840,6 +12134,90 @@
             "time": "2025-04-30T06:54:44+00:00"
         },
         {
+            "name": "jibaymcs/filament-tour",
+            "version": "2.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JibayMcs/filament-tour.git",
+                "reference": "e70c600f6ab0ef5da7236d2cbd3c76047e286844"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JibayMcs/filament-tour/zipball/e70c600f6ab0ef5da7236d2cbd3c76047e286844",
+                "reference": "e70c600f6ab0ef5da7236d2cbd3c76047e286844",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^2.0",
+                "illuminate/contracts": "^9.0|^10.0",
+                "php": "^8.0",
+                "spatie/laravel-package-tools": "^1.13.5"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^6.0",
+                "nunomaduro/larastan": "^2.0.1",
+                "orchestra/testbench": "^7.0",
+                "pestphp/pest": "^1.21",
+                "pestphp/pest-plugin-laravel": "^1.1",
+                "pestphp/pest-plugin-livewire": "^1.0",
+                "pestphp/pest-plugin-parallel": "^0.3",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "FilamentTour": "JibayMcs\\FilamentTour\\Facades\\FilamentTour"
+                    },
+                    "providers": [
+                        "JibayMcs\\FilamentTour\\FilamentTourServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JibayMcs\\FilamentTour\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "JibayMcs",
+                    "email": "jb@ss2i-services.fr",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Bring the power of DriverJs to your Filament panels and start a tour !",
+            "homepage": "https://github.com/jibaymcs/filament-tour",
+            "keywords": [
+                "JibayMcs",
+                "driverjs",
+                "filament",
+                "filament-tour",
+                "filamentphp",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/jibaymcs/filament-tour/issues",
+                "source": "https://github.com/jibaymcs/filament-tour"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/JibayMcs",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-08-22T08:30:30+00:00"
+        },
+        {
             "name": "kkomelin/laravel-translatable-string-exporter",
             "version": "1.23.0",
             "source": {
@@ -13900,7 +14278,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": {
+        "jibaymcs/filament-tour": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

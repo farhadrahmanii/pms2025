@@ -8,9 +8,7 @@
                 {{ $record['project']->name }}
             </span>
         @endif
-        <a href="{{ route('filament.resources.tickets.view', $record['id']) }}"
-           target="_blank"
-           class="record-title">
+        <a href="{{ route('filament.resources.tickets.view', $record['id']) }}" target="_blank" class="record-title">
             <span class="code">{{ $record['code'] }}</span>
             <span class="title">{{ $record['title'] }}</span>
         </a>
@@ -20,7 +18,7 @@
             @php($epic = $record['epic'])
             @if($epic && $epic != "")
                 <div class="px-2 py-1 rounded flex items-center justify-center text-center text-xs text-white
-                            bg-purple-500" title="{{ __('Epic') }}">
+                                bg-purple-500" title="{{ __('Epic') }}">
                     {{ $epic->name }}
                 </div>
             @endif

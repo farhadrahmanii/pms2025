@@ -7,7 +7,9 @@ module.exports = {
         './app/Filament/**/*.php',
         './app/Http/Livewire/**/*.php',
         './vendor/filament/**/*.blade.php',
-        './node_modules/flowbite/**/*.js'
+        './node_modules/flowbite/**/*.js',
+        '<path-to-vendor>/awcodes/filament-quick-create/resources/**/*.blade.php',
+        '<path-to-vendor>/awcodes/filament-badgeable-column/resources/**/*.blade.php',
     ],
     darkMode: 'class',
     theme: {

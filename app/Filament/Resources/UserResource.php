@@ -102,6 +102,7 @@ class UserResource extends Resource
                     ->label(__('Full name'))
                     ->sortable()
                     ->searchable(),
+
                 Tables\Columns\TagsColumn::make('departments.name')
                     ->label(__('Department'))
                     ->sortable()
@@ -129,6 +130,10 @@ class UserResource extends Resource
                     ->searchable(),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('departments')
+                    ->label(__('Department'))
+                    ->relationship('departments', 'name')
+                    ->searchable(),
 
             ])
             ->actions([

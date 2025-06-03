@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use AskerAkbar\GptTrixEditor\Components\GptTrixEditor;
 use App\Models\User;
+use Awcodes\FilamentBadgeableColumn\Components\Badge;
+use Awcodes\FilamentBadgeableColumn\Components\BadgeableColumn;
 class DepartmentResource extends Resource
 {
     protected static ?string $model = Department::class;

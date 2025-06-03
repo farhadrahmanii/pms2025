@@ -31,6 +31,10 @@ class UsersRelationManager extends RelationManager
                     ->label(__('User full name'))
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TagsColumn::make('departments.name')
+                    ->label('Department')
+                    ->sortable()
+                    ->searchable(),
 
                 Tables\Columns\BadgeColumn::make('pivot.role')
                     ->label(__('User role'))
@@ -40,30 +44,33 @@ class UsersRelationManager extends RelationManager
                     ->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('departments')
+                    ->label(__('Department'))
+                    ->relationship('departments', 'name')
+                    ->searchable(),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),
                 Tables\Actions\AttachAction::make()
                     ->preloadRecordSelect()
-                    ->form(fn (Tables\Actions\AttachAction $action): array => [
+                    ->form(fn(Tables\Actions\AttachAction $action): array => [
                         $action->getRecordSelect(),
                         Forms\Components\Select::make('role')
                             ->label(__('User role'))
                             ->searchable()
-                            ->default(fn () => config('system.projects.affectations.roles.default'))
-                            ->options(fn () => config('system.projects.affectations.roles.list'))
+                            ->default(fn() => config('system.projects.affectations.roles.default'))
+                            ->options(fn() => config('system.projects.affectations.roles.list'))
                             ->required(),
                     ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->modalWidth('xl')
-                    ->form(fn (Tables\Actions\EditAction $action): array => [
+                    ->form(fn(Tables\Actions\EditAction $action): array => [
                         Forms\Components\Select::make('role')
                             ->label(__('User role'))
                             ->searchable()
-                            ->options(fn () => config('system.projects.affectations.roles.list'))
+                            ->options(fn() => config('system.projects.affectations.roles.list'))
                             ->required(),
                     ]),
                 Tables\Actions\DeleteAction::make(),

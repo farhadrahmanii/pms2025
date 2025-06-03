@@ -1,4 +1,4 @@
-<form wire:submit.prevent="submit">
+<form wire:submit.prevent="submit" class="dark:bg-gray-500">
     {{ $this->form }}
 
     <div class="dialog-buttons">

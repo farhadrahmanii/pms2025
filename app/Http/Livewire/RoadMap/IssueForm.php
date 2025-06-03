@@ -30,12 +30,12 @@ class IssueForm extends Component implements HasForms
             $defaultStatus = TicketStatus::where('project_id', $this->project->id)
                 ->where('is_default', true)
                 ->first()
-                ?->id;
+                    ?->id;
         } else {
             $defaultStatus = TicketStatus::whereNull('project_id')
                 ->where('is_default', true)
                 ->first()
-                ?->id;
+                    ?->id;
         }
         $this->form->fill([
             'project_id' => $this->project?->id ?? null,
@@ -75,49 +75,50 @@ class IssueForm extends Component implements HasForms
                                 ->reactive()
                                 ->disabled($this->project != null)
                                 ->columnSpan(2)
-                                ->options(fn() => Project::where('owner_id', auth()->user()->id)
-                                    ->orWhereHas('users', function ($query) {
-                                        return $query->where('users.id', auth()->user()->id);
-                                    })->pluck('name', 'id')->toArray()
+                                ->options(
+                                    fn() => Project::where('owner_id', auth()->user()->id)
+                                        ->orWhereHas('users', function ($query) {
+                                            return $query->where('users.id', auth()->user()->id);
+                                        })->pluck('name', 'id')->toArray()
                                 )
                                 ->afterStateUpdated(fn(Closure $get) => $this->initProject($get('project_id')))
-                                ->required(),
-
+                                ->required()
+                                ->extraAttributes(['class' => 'dark:bg-gray-500']),
                             Forms\Components\Select::make('sprint_id')
                                 ->label(__('Sprint'))
                                 ->searchable()
                                 ->reactive()
-                                ->visible(fn () => $this->project && $this->project->type === 'scrum')
+                                ->visible(fn() => $this->project && $this->project->type === 'scrum')
                                 ->columnSpan(2)
-                                ->options(fn () => $this->sprints),
-
+                                ->options(fn() => $this->sprints)
+                                ->extraAttributes(['class' => 'dark:bg-gray-500']),
                             Forms\Components\Select::make('epic_id')
                                 ->label(__('Epic'))
                                 ->searchable()
                                 ->reactive()
                                 ->columnSpan(2)
                                 ->required()
-                                ->visible(fn () => $this->project && $this->project->type !== 'scrum')
-                                ->options(fn () => $this->epics),
-
+                                ->visible(fn() => $this->project && $this->project->type !== 'scrum')
+                                ->options(fn() => $this->epics)
+                                ->extraAttributes(['class' => 'dark:bg-gray-500']),
                             Forms\Components\TextInput::make('name')
                                 ->label(__('Ticket name'))
                                 ->required()
                                 ->columnSpan(4)
-                                ->maxLength(255),
+                                ->maxLength(255)
+                                ->extraAttributes(['class' => 'dark:bg-gray-500']),
                         ]),
-
                     Forms\Components\Select::make('owner_id')
                         ->label(__('Ticket owner'))
                         ->searchable()
                         ->options(fn() => User::all()->pluck('name', 'id')->toArray())
-                        ->required(),
-
+                        ->required()
+                        ->extraAttributes(['class' => 'dark:bg-gray-500']),
                     Forms\Components\Select::make('responsible_id')
                         ->label(__('Ticket responsible'))
                         ->searchable()
-                        ->options(fn() => User::all()->pluck('name', 'id')->toArray()),
-
+                        ->options(fn() => User::all()->pluck('name', 'id')->toArray())
+                        ->extraAttributes(['class' => 'dark:bg-gray-500']),
                     Forms\Components\Grid::make()
                         ->columns(3)
                         ->columnSpan(2)
@@ -138,27 +139,27 @@ class IssueForm extends Component implements HasForms
                                             ->toArray();
                                     }
                                 })
-                                ->required(),
-
+                                ->required()
+                                ->extraAttributes(['class' => 'dark:bg-gray-500']),
                             Forms\Components\Select::make('type_id')
                                 ->label(__('Ticket type'))
                                 ->searchable()
                                 ->options(fn() => TicketType::all()->pluck('name', 'id')->toArray())
-                                ->required(),
-
+                                ->required()
+                                ->extraAttributes(['class' => 'dark:bg-gray-500']),
                             Forms\Components\Select::make('priority_id')
                                 ->label(__('Ticket priority'))
                                 ->searchable()
                                 ->options(fn() => TicketPriority::all()->pluck('name', 'id')->toArray())
-                                ->required(),
+                                ->required()
+                                ->extraAttributes(['class' => 'dark:bg-gray-500']),
                         ]),
                 ]),
-
             Forms\Components\RichEditor::make('content')
                 ->label(__('Ticket content'))
                 ->required()
-                ->columnSpan(2),
-
+                ->columnSpan(2)
+                ->extraAttributes(['class' => 'dark:bg-gray-500']),
             Forms\Components\Grid::make()
                 ->columnSpan(2)
                 ->columns(12)
@@ -166,7 +167,8 @@ class IssueForm extends Component implements HasForms
                     Forms\Components\TextInput::make('estimation')
                         ->label(__('Estimation time'))
                         ->numeric()
-                        ->columnSpan(4),
+                        ->columnSpan(4)
+                        ->extraAttributes(['class' => 'dark:bg-gray-500']),
                 ]),
         ];
     }

@@ -1,7 +1,7 @@
 <x-filament::page>
     <div class="mb-4 flex items-center gap-4">
         <label for="date" class="font-semibold">Date:</label>
-        <input type="date" id="date" wire:model="date" class="border rounded px-2 py-1" />
+        <input type="date" id="date" wire:model="date" class="border rounded px-2 py-1 dark:bg-gray-800" />
         <x-filament::button color="primary" wire:click="exportExcel">
             Export to Excel
         </x-filament::button>
@@ -12,6 +12,8 @@
             <thead>
                 <tr>
                     <th class="px-4 py-2 border-b">User</th>
+                    <th class="px-4 py-2 border-b">Todo Tasks</th>
+                    <th class="px-4 py-2 border-b">Progress Tasks</th>
                     <th class="px-4 py-2 border-b">Completed Tasks</th>
                     <th class="px-4 py-2 border-b">Pending Tasks</th>
                 </tr>
@@ -21,11 +23,19 @@
                     <td class="px-4 py-2 border-b text-center">{{ auth()->user()->name }}</td>
                     <td class="px-4 py-2 border-b text-center">
                         {{ \App\Models\Ticket::where(function ($q) {
-    $q->where('responsible_id', auth()->id())->orWhere('owner_id', auth()->id()); })->where('approved', 1)->whereDate('updated_at', $date)->count() }}
+    $q->where('responsible_id', auth()->id()); })->where('approved', 1)->whereDate('updated_at', $date)->where('status_id', '1')->count() }}
                     </td>
                     <td class="px-4 py-2 border-b text-center">
                         {{ \App\Models\Ticket::where(function ($q) {
-    $q->where('responsible_id', auth()->id())->orWhere('owner_id', auth()->id()); })->where('approved', 0)->whereDate('updated_at', $date)->count() }}
+    $q->where('responsible_id', auth()->id()); })->where('approved', 1)->whereDate('updated_at', $date)->where('status_id', '2')->count() }}
+                    </td>
+                    <td class="px-4 py-2 border-b text-center">
+                        {{ \App\Models\Ticket::where(function ($q) {
+    $q->where('responsible_id', auth()->id()); })->where('approved', 1)->whereDate('updated_at', $date)->where('status_id', '3')->count() }}
+                    </td>
+                    <td class="px-4 py-2 border-b text-center">
+                        {{ \App\Models\Ticket::where(function ($q) {
+    $q->where('responsible_id', auth()->id()); })->where('approved', 0)->whereDate('updated_at', $date)->count() }}
                     </td>
                 </tr>
             </tbody>
@@ -46,7 +56,7 @@
         </thead>
         <tbody>
             @foreach($report as $row)
-                <tr>
+                <tr class="hover:cursor-pointer" onclick="window.location.href='{{ route('filament.resources.tickets.view', $row['id']) }}'">
                     <td class="px-4 py-2 border-b text-center">{{ $row['project']['name'] }}</td>
                     <td class="px-4 py-2 border-b text-center">{{ $row['name'] }}</td>
                     <td class="px-4 py-2 border-b text-center">{{ $row['owner']['name'] }}</td>
@@ -64,6 +74,24 @@
                                     padding: 12px 48px;
                                     color: #fff;
                                     background: linear-gradient(to right, #9f9f9f 0, #fff 10%, rgb(105, 187, 38) 20%);
+                                    background-position: 0;
+                                    -webkit-background-clip: text;
+                                    -webkit-text-fill-color: transparent;
+                                    animation: shine 3s infinite linear;
+                                    animation-fill-mode: forwards;
+                                    -webkit-text-size-adjust: none;
+                                    font-weight: 600;
+                                    font-size: 16px;
+                                    text-decoration: none;
+                                    white-space: nowrap;
+                                    font-family: "Poppins", sans-serif;
+                                }
+
+                                .btn-pending {
+                                    transform: translate(-50%, -50%);
+                                    padding: 12px 48px;
+                                    color: #fff;
+                                    background: linear-gradient(to right, #9f9f9f 0, #fff 10%, rgb(245, 10, 30) 20%);
                                     background-position: 0;
                                     -webkit-background-clip: text;
                                     -webkit-text-fill-color: transparent;
@@ -134,10 +162,7 @@
                                 }
                             </style>
                             <!-- From Uiverse.io by neerajbaniwal -->
-                            <a href="#" class="btn-shine animate-pulse">Approved</a>
-
-
-
+                            <a href="#" class="btn-shine">Approved</a>
                         @else
                             <span class="flex items-center justify-center">
                                 <style>
@@ -192,8 +217,8 @@
                                     <div class="track"></div>
                                     <div class="inner-track"></div>
                                     <div class="orb"></div>
+                                    <span class="btn-pending text-gray-500 ">Pending</span>
                                 </div>
-                                <span class="ml-2 text-gray-500 animate-pulse ">Pending</span>
                             </span>
                         @endif
                     </td>

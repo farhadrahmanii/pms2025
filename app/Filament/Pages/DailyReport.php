@@ -32,8 +32,7 @@ class DailyReport extends Page
     {
         $user = auth()->user();
         $tickets = Ticket::where(function ($q) use ($user) {
-            $q->where('responsible_id', $user->id)
-                ->orWhere('owner_id', $user->id);
+            $q->where('responsible_id', $user->id);
         })
             ->whereDate('updated_at', $this->date)
             ->get();
