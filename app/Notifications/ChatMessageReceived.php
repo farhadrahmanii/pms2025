@@ -9,14 +9,15 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Filament\Notifications\Actions\Action;
 use Filament\Notifications\Notification as FilamentNotification;
+use NotificationChannels\WebPush\WebPushChannel;
+use NotificationChannels\WebPush\WebPushMessage;
 
 class ChatMessageReceived extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    private $sender;
+    private $senderId;
     private $message;
-    private $chatUrl;
 
     /**
      * Create a new notification instance.
@@ -28,9 +29,14 @@ class ChatMessageReceived extends Notification implements ShouldQueue
      */
     public function __construct(User $sender, string $message, string $chatUrl)
     {
-        $this->sender = $sender;
+        $this->senderId = $sender->getKey();
         $this->message = $message;
-        $this->chatUrl = $chatUrl;
+        // $chatUrl is ignored, always generate from notifiable in notification
+    }
+
+    private function getSender()
+    {
+        return \App\Models\User::find($this->senderId);
     }
 
     /**
@@ -41,9 +47,18 @@ class ChatMessageReceived extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail', 'database'];
+        return ['mail', 'database', WebPushChannel::class];
     }
-
+    public function toWebPush($notifiable, $notification)
+    {
+        $sender = $this->getSender();
+        $messageText = is_string($this->message) ? $this->message : '';
+        return (new WebPushMessage)
+            ->title('New chat message from ' . ($sender ? $sender->name : 'Unknown'))
+            ->icon('/favicon.ico')
+            ->body('Message: "' . $messageText . '"')
+            ->options(['TTL' => 1000]);
+    }
     /**
      * Get the mail representation of the notification.
      *
@@ -52,21 +67,16 @@ class ChatMessageReceived extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
+        $sender = $this->getSender();
         return (new MailMessage)
-            ->line(
-                __('You have received a new chat message from :name.', [
-                    'name' => $this->sender->name
-                ])
-            )
-            ->line(__('Message: ":message"', ['message' => $this->message]))
-            ->action(
-                __('Open Chat'),
-                $this->chatUrl
-            );
+            ->line('You have received a new chat message from ' . ($sender ? $sender->name : 'Unknown') . '.')
+            ->line('Message: "' . $this->message . '"')
+            ->action('Open Chat', url('chatify/' . $notifiable->id));
     }
 
-    public function toDatabase(User $notifiable): array
+    public function toDatabase($notifiable): array
     {
+        $sender = $this->getSender();
         $messageText = $this->message;
         $decoded = null;
         if (is_string($messageText) && $this->isJson($messageText)) {
@@ -80,18 +90,14 @@ class ChatMessageReceived extends Notification implements ShouldQueue
             $messageText = $messageText->body;
         }
         return FilamentNotification::make()
-            ->title(
-                __('New chat message from :name', [
-                    'name' => $this->sender->name
-                ])
-            )
+            ->title('New chat message from ' . ($sender ? $sender->name : 'Unknown'))
             ->icon('heroicon-o-chat')
-            ->body(fn() => __('Message: ":message"', ['message' => json_decode($messageText, true)['body']]))
+            ->body(fn() => 'Message: "' . (is_string($messageText) ? $messageText : '') . '"')
             ->actions([
                 Action::make('view')
                     ->link()
                     ->icon('heroicon-s-chat')
-                    ->url(fn() => $this->chatUrl),
+                    ->url(fn() => url('chatify/' . $notifiable->id)),
             ])
             ->getDatabaseMessage();
     }

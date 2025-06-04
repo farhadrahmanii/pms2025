@@ -59,7 +59,7 @@ class DailyReport extends Page
                         'Responsible' => optional($ticket->responsible)->name,
                         'Status' => optional($ticket->status)->name,
                         'Project' => optional($ticket->project)->name,
-                        'Approved' => $ticket->approved,
+                        'Approved' => $ticket->approved ? 'Yes' : 'No',
                         'Estimation' => $ticket->estimation,
                         'Created At' => $ticket->created_at,
                         'Updated At' => $ticket->updated_at,
