@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use Carbon\Carbon;
 use Filament\Pages\Page;
 use App\Models\Ticket;
 use App\Models\User;
@@ -54,15 +55,15 @@ class DailyReport extends Page
                     return [
                         'ID' => $ticket->id,
                         'Name' => $ticket->name,
-                        'Content' => $ticket->content,
+                        'Content' => strip_tags($ticket->content),
                         'Owner' => optional($ticket->owner)->name,
                         'Responsible' => optional($ticket->responsible)->name,
                         'Status' => optional($ticket->status)->name,
                         'Project' => optional($ticket->project)->name,
                         'Approved' => $ticket->approved ? 'Yes' : 'No',
                         'Estimation' => $ticket->estimation,
-                        'Created At' => $ticket->created_at,
-                        'Updated At' => $ticket->updated_at,
+                        'Created At' => Carbon::parse($ticket->created_at)->diffForHumans(),
+                        'Updated At' => Carbon::parse($ticket->updated_at)->diffForHumans(),
                         'Type' => optional($ticket->type)->name,
                         'Priority' => optional($ticket->priority)->name,
                         'Epic' => optional($ticket->epic)->name,

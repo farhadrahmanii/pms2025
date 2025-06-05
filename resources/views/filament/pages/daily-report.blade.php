@@ -50,21 +50,41 @@
                 <th class="px-4 py-2 border-b">Owner</th>
                 <th class="px-4 py-2 border-b">Responsible</th>
                 <th class="px-4 py-2 border-b">Estimated Time</th>
-                <th class="px-4 py-2 border-b">assign Date</th>
+                <th class="px-4 py-2 border-b">Start Date</th>
+                <th class="px-4 py-2 border-b">End Date</th>
                 <th class="px-4 py-2 border-b">Status</th>
             </tr>
         </thead>
         <tbody>
             @foreach($report as $row)
-                <tr class="hover:cursor-pointer" onclick="window.location.href='{{ route('filament.resources.tickets.view', $row['id']) }}'">
+                <tr class="hover:cursor-pointer"
+                    onclick="window.location.href='{{ route('filament.resources.tickets.view', $row['id']) }}'">
                     <td class="px-4 py-2 border-b text-center">{{ $row['project']['name'] }}</td>
                     <td class="px-4 py-2 border-b text-center">{{ $row['name'] }}</td>
-                    <td class="px-4 py-2 border-b text-center">{{ $row['owner']['name'] }}</td>
-                    <td class="px-4 py-2 border-b text-center">{{ $row['responsible']['name'] }}</td>
+                   <td class="px-4 py-2 border-b text-center">
+                                <div class="flex items-center justify-center">
+                                    <img src="{{ $row->owner->photo ?? $row->owner->avatar_url }}"
+                                        alt="{{ $row->owner->name }}" class="w-8 h-8 rounded-full mr-2">
+                                    <span>{{ $row->owner->name }}</span>
+                                </div>
+                            </td>
+                            <td class="px-4 py-2 border-b text-center">
+                                <div class="flex items-center justify-center">
+                                    <img src="{{ $row->responsible->photo ?? $row->responsible->avatar_url }}"
+                                        alt="{{ $row->responsible->name }}" class="w-8 h-8 rounded-full mr-2">
+                                    {{ $row->responsible->name }}
+                                </div>
+                            </td>
                     <td class="px-4 py-2 border-b text-center">{{ $row['estimation'] }} hours</td>
                     <td class="px-4 py-2 border-b text-center">
                         {{ Carbon\Carbon::parse($row['updated_at'])->diffForHumans() }}
                     </td>
+                     <td class="px-4 py-2 border-b text-center">
+                                <span
+                                    style="color: {{ Carbon\Carbon::parse($row->end_date)->diffInDays() <= 1 ? 'red' : 'blue' }}; font-weight: bold;">
+                                    {{ Carbon\Carbon::parse($row->end_date)->diffForHumans() }}
+                                </span>
+                            </td>
                     <td class="px-4 py-2 border-b text-center">
                         @if($row['approved'])
                             <style>

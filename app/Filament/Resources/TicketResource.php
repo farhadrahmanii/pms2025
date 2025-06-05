@@ -122,7 +122,10 @@ class TicketResource extends Resource
                                     ->label(__('Ticket responsible'))
                                     ->searchable()
                                     ->options(fn() => User::all()->pluck('name', 'id')->toArray()),
-
+                                Forms\Components\DatePicker::make('end_date')
+                                    ->label(__('End date'))
+                                    ->required(fn($livewire) => $livewire instanceof EditRecord)
+                                    ->columnSpan(1),
                                 Forms\Components\Grid::make()
                                     ->columns(3)
                                     ->columnSpan(2)

@@ -32,7 +32,8 @@ class Ticket extends Model implements HasMedia
         'priority_id',
         'estimation',
         'epic_id',
-        'sprint_id'
+        'sprint_id',
+        'end_date'
     ];
 
     public static function boot()
