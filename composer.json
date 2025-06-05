@@ -23,7 +23,6 @@
         "guava/filament-icon-picker": "^1.3",
         "guzzlehttp/guzzle": "^7.2",
         "heloufir/filament-workflow-manager": "^1.1",
-        "ibrahimbougaoua/filament-rating-star": "*",
         "icetalker/filament-chatgpt-bot": "^0.1.3",
         "icetalker/filament-stepper": "^1.2",
         "jeffgreco13/filament-breezy": "^1.4",
