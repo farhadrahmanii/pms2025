@@ -19,9 +19,159 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($tickets as $ticket)
+                @php
+                    $ticketsByProject = $tickets->groupBy('project_id');
+                @endphp
+                @foreach($ticketsByProject as $projectId => $projectTickets)
                     <tr>
-                        @if (Auth::user()->id = $ticket->owner_id)
+                        <td colspan="8" class="bg-gray-100 dark:bg-gray-900 font-bold text-lg px-4 py-2 border-b">
+                            Project: {{ optional($projectTickets->first()->project)->name ?? 'Unknown Project' }}
+                        </td>
+                    </tr>
+                    @foreach($projectTickets as $ticket)
+                        <tr onclick="if(!event.target.closest('.no-row-redirect')){window.location='{{ route('filament.resources.tickets.view', ['record' => $ticket->id]) }}'}"
+                            style="cursor:pointer;">
+                            @if (Auth::user()->id == $ticket->owner_id)
+                                <td class="px-4 py-2 border-b">{{ $ticket->id }}</td>
+                                <td class="px-4 py-2 border-b text-center">
+                                    <div class="flex items-center justify-center">
+                                        <img src="{{ $ticket->owner->photo ?? $ticket->owner->avatar_url }}"
+                                            alt="{{ $ticket->owner->name }}" class="w-8 h-8 rounded-full mr-2">
+                                        <span>{{ $ticket->owner->name }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 border-b text-center">
+                                    <div class="flex items-center justify-center">
+                                        <img src="{{ $ticket->responsible->photo ?? $ticket->responsible->avatar_url }}"
+                                            alt="{{ $ticket->responsible->name }}" class="w-8 h-8 rounded-full mr-2">
+                                        {{ $ticket->responsible->name }}
+                                    </div>
+                                </td>
+                                <td class="px-4 py-2 border-b">{{ $ticket->name }}</td>
+                                <td class="px-4 py-2 border-b flex items-center justify-center">
+                                    @php
+                                        if (!$ticket->end_date) {
+                                            $progress = 0;
+                                            $color = 'gray';
+                                        } else {
+                                            $endDate = \Carbon\Carbon::parse($ticket->end_date)->startOfDay();
+                                            $now = now()->startOfDay();
+                                            if ($endDate->equalTo($now)) {
+                                                $progress = 1;
+                                                $color = 'orange';
+                                            } elseif ($endDate->lessThan($now)) {
+                                                $progress = 1;
+                                                $color = 'red';
+                                            } else {
+                                                $createdAt = $ticket->created_at ? \Carbon\Carbon::parse($ticket->created_at)->startOfDay() : $now;
+                                                $totalPeriod = $createdAt->diffInDays($endDate, false);
+                                                $elapsed = $createdAt->diffInDays($now, false);
+                                                $progress = $totalPeriod > 0 ? min(1, max(0, $elapsed / $totalPeriod)) : 0;
+                                                $color = 'blue';
+                                            }
+                                        }
+                                    @endphp
+                                    <svg width="42" height="42" viewBox="0 0 36 36">
+                                        <path fill="none" stroke="#e5e7eb" stroke-width="2"
+                                            d="M18 2.0845
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <path fill="none" stroke="{{ $color }}" stroke-width="2"
+                                            stroke-dasharray="{{ round($progress * 100) }}, 100"
+                                            d="M18 2.0845
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                        <text x="18" y="20.35" fill="{{ $color }}" font-size="8" text-anchor="middle">
+                                            {{ $progress == 1 && $color == 'orange' ? 'Today' : ($progress == 1 && $color == 'red' ? 'Expired' : (round($progress * 100) . '%')) }}
+                                        </text>
+                                    </svg>
+                                </td>
+                                <td class="px-4 py-2 border-b text-center">
+                                    @if(\Carbon\Carbon::parse($ticket->end_date)->isPast())
+                                        <span style="color: red; font-weight: bold;"></span>
+                                        Expired {{ \Carbon\Carbon::parse($ticket->end_date)->diffForHumans(null, null, false, 1) }}
+                                        </span>
+                                    @else
+                                        <span style="color: blue; font-weight: bold;">
+                                            Ticket will expire on {{ \Carbon\Carbon::parse($ticket->end_date)->toFormattedDateString() }}
+                                        </span>
+                                    @endif</span>
+                                </td>
+                                <td class="px-4 py-2 border-b no-row-redirect">
+                                    <div class="relative inline-block text-left">
+                                        <button type="button"
+                                            class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 focus:outline-none"
+                                            id="actionsDropdownButton-{{ $ticket->id }}" aria-expanded="true" aria-haspopup="true"
+                                            onclick="document.getElementById('actionsDropdownMenu-{{ $ticket->id }}').classList.toggle('hidden')">
+                                            Actions
+                                            <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.584l3.71-3.354a.75.75 0 111.02 1.1l-4.25 3.84a.75.75 0 01-1.02 0l-4.25-3.84a.75.75 0 01.02-1.06z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                        </button>
+                                        <div id="actionsDropdownMenu-{{ $ticket->id }}"
+                                            class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 hidden z-50">
+                                            <div class="py-1">
+                                                <button
+                                                    class="w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-green-50 dark:hover:bg-green-900"
+                                                    wire:click="approve({{ $ticket->id }})"
+                                                    onclick="event.stopPropagation(); if(confirm('Are you sure you want to approve this ticket?')) { Livewire.emit('approve', {{ $ticket->id }}); } return false;">Approve</button>
+                                                <button
+                                                    class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900"
+                                                    wire:click="reject({{ $ticket->id }})"
+                                                    onclick="event.stopPropagation(); if(confirm('Are you sure you want to reject this ticket?')) { Livewire.emit('reject', {{ $ticket->id }}); } return false;">Reject</button>
+                                                <button
+                                                    class="w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                                    wire:click="deleteTicket({{ $ticket->id }})"
+                                                    onclick="event.stopPropagation(); if(confirm('Are you sure you want to delete this ticket?')) { Livewire.emit('deleteTicket', {{ $ticket->id }}); } return false;">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            @endif
+
+                        </tr>
+                    @endforeach
+                @endforeach
+            </tbody>
+        </table>
+    @endif
+
+    {{-- Rejected Tickets List --}}
+    @if(isset($rejectedTickets) && $rejectedTickets->isNotEmpty())
+        <h2 class="text-xl font-bold mt-10 mb-4 text-red-600 dark:text-red-400 animated:puls" style="color: red;">Rejected
+            Tickets
+        </h2>
+        <hr style="height: 20px; border: 10px solid red; border-radius: 5px;" />
+        <table class="w-full bg-white dark:bg-gray-800 border border-gray-200 rounded dark:text-white-500 mt-2"
+            style="margin-bottom: 50px;">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2 border-b">ID</th>
+                    <th class="px-4 py-2 border-b">Owner</th>
+                    <th class="px-4 py-2 border-b">Responsible</th>
+                    <th class="px-4 py-2 border-b">Ticket Name</th>
+                    <th class="px-4 py-2 border-b">Date Progress</th>
+                    <th class="px-4 py-2 border-b">End Date</th>
+                    <th class="px-4 py-2 border-b">Rejected At</th>
+                    <th class="px-4 py-2 border-b">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $rejectedByProject = $rejectedTickets->groupBy('project_id');
+                @endphp
+                @foreach($rejectedByProject as $projectId => $projectTickets)
+                    <tr>
+                        <td colspan="8" class="bg-gray-100 dark:bg-gray-900 font-bold text-lg px-4 py-2 border-b">
+                            Project: {{ optional($projectTickets->first()->project)->name ?? 'Unknown Project' }}
+                        </td>
+                    </tr>
+                    @foreach($projectTickets as $ticket)
+                        <tr onclick="if(!event.target.closest('.no-row-redirect')){window.location='{{ route('filament.resources.tickets.view', ['record' => $ticket->id]) }}'}"
+                            style="cursor:pointer;">
                             <td class="px-4 py-2 border-b">{{ $ticket->id }}</td>
                             <td class="px-4 py-2 border-b text-center">
                                 <div class="flex items-center justify-center">
@@ -38,34 +188,110 @@
                                 </div>
                             </td>
                             <td class="px-4 py-2 border-b">{{ $ticket->name }}</td>
-                            <td class="px-4 py-2 border-b">{{ Carbon\Carbon::parse($ticket->updated_at)->diffForHumans() }}</td>
+                            <td class="px-4 py-2 border-b flex items-center justify-center">
+                                @php
+                                    if (!$ticket->end_date) {
+                                        $progress = 0;
+                                        $color = 'gray';
+                                    } else {
+                                        $endDate = \Carbon\Carbon::parse($ticket->end_date)->startOfDay();
+                                        $now = now()->startOfDay();
+                                        if ($endDate->equalTo($now)) {
+                                            $progress = 1;
+                                            $color = 'orange';
+                                        } elseif ($endDate->lessThan($now)) {
+                                            $progress = 1;
+                                            $color = 'red';
+                                        } else {
+                                            $createdAt = $ticket->created_at ? \Carbon\Carbon::parse($ticket->created_at)->startOfDay() : $now;
+                                            $totalPeriod = $createdAt->diffInDays($endDate, false);
+                                            $elapsed = $createdAt->diffInDays($now, false);
+                                            $progress = $totalPeriod > 0 ? min(1, max(0, $elapsed / $totalPeriod)) : 0;
+                                            $color = 'blue';
+                                        }
+                                    }
+                                @endphp
+                                <svg width="42" height="42" viewBox="0 0 36 36">
+                                    <path fill="none" stroke="#e5e7eb" stroke-width="2"
+                                        d="M18 2.0845
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            a 15.9155 15.9155 0 0 1 0 31.831
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path fill="none" stroke="{{ $color }}" stroke-width="2"
+                                        stroke-dasharray="{{ round($progress * 100) }}, 100"
+                                        d="M18 2.0845
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            a 15.9155 15.9155 0 0 1 0 31.831
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <text x="18" y="20.35" fill="{{ $color }}" font-size="8" text-anchor="middle">
+                                        {{ $progress == 1 && $color == 'orange' ? 'Today' : ($progress == 1 && $color == 'red' ? 'Expired' : (round($progress * 100) . '%')) }}
+                                    </text>
+                                </svg>
+                            </td>
                             <td class="px-4 py-2 border-b text-center">
-                                <span
-                                    style="color: {{ Carbon\Carbon::parse($ticket->end_date)->diffInDays() <= 1 ? 'red' : 'blue' }}; font-weight: bold;">
-                                    {{ Carbon\Carbon::parse($ticket->end_date)->diffForHumans() }}
-                                </span>
+                                @if(\Carbon\Carbon::parse($ticket->end_date)->isPast())
+                                    <span style="color: red; font-weight: bold;"></span>
+                                    Expired {{ \Carbon\Carbon::parse($ticket->end_date)->diffForHumans(null, null, false, 1) }}
+                                    </span>
+                                @else
+                                    <span style="color: blue; font-weight: bold;">
+                                        Ticket will expire on {{ \Carbon\Carbon::parse($ticket->end_date)->toFormattedDateString() }}
+                                    </span>
+                                @endif</span>
                             </td>
-                            <td class="px-4 py-2 border-b space-x-2">
-                                <x-filament::button color="success" wire:click="approve({{ $ticket->id }})"
-                                    onclick="return confirm('Are you sure you want to approve this ticket?')">
-                                    Approve
-                                </x-filament::button>
-                                <x-filament::button color="danger" wire:click="reject({{ $ticket->id }})">
-                                    Reject
-                                </x-filament::button>
-                                <x-filament::button color="secondary" wire:click="deleteTicket({{ $ticket->id }})"
-                                    onclick="return confirm('Are you sure you want to delete this ticket?')">
-                                    Delete
-                                </x-filament::button>
+                            <td class="px-4 py-2 border-b">
+                                {{ $ticket->updated_at ? Carbon\Carbon::parse($ticket->updated_at)->diffForHumans() : '-' }}
                             </td>
-                        @endif
+                            <td class="px-4 py-2 border-b no-row-redirect">
+                                <div class="relative inline-block text-left">
+                                    <button type="button"
+                                        class="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 focus:outline-none"
+                                        id="actionsDropdownButton-{{ $ticket->id }}" aria-expanded="true" aria-haspopup="true"
+                                        onclick="document.getElementById('actionsDropdownMenu-{{ $ticket->id }}').classList.toggle('hidden')">
+                                        Actions
+                                        <svg class="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                            fill="currentColor" aria-hidden="true">
+                                            <path fill-rule="evenodd"
+                                                d="M5.23 7.21a.75.75 0 011.06.02L10 10.584l3.71-3.354a.75.75 0 111.02 1.1l-4.25 3.84a.75.75 0 01-1.02 0l-4.25-3.84a.75.75 0 01.02-1.06z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                    <div id="actionsDropdownMenu-{{ $ticket->id }}"
+                                        class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white dark:bg-gray-700 ring-1 ring-black ring-opacity-5 hidden z-50">
+                                        <div class="py-1">
+                                            <button
+                                                class="w-full text-left px-4 py-2 text-sm text-green-600 hover:bg-green-50 dark:hover:bg-green-900"
+                                                wire:click="approve({{ $ticket->id }})"
+                                                onclick="event.stopPropagation(); if(confirm('Are you sure you want to approve this ticket?')) { Livewire.emit('approve', {{ $ticket->id }}); } return false;">Approve</button>
 
-                    </tr>
+                                            <button
+                                                class="w-full text-left px-4 py-2 text-sm text-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                                wire:click="deleteTicket({{ $ticket->id }})"
+                                                onclick="event.stopPropagation(); if(confirm('Are you sure you want to delete this ticket?')) { Livewire.emit('deleteTicket', {{ $ticket->id }}); } return false;">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 @endforeach
             </tbody>
         </table>
+    @elseif(isset($rejectedTickets))
+        <div class="text-gray-500 mt-4">No rejected tickets.</div>
     @endif
     </div>
 
 
 </x-filament::page>
+<script>
+    // Optional: Hide dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+        document.querySelectorAll('[id^="actionsDropdownMenu-"]').forEach(function (menu) {
+            if (!menu.classList.contains('hidden')) {
+                const button = document.getElementById('actionsDropdownButton-' + menu.id.split('-').pop());
+                if (!menu.contains(event.target) && !button.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            }
+        });
+    });
+</script>

@@ -44,7 +44,7 @@ class PermissionsSeeder extends Seeder
         'View timesheet dashboard' => 'Timesheet'
     ];
 
-    private string $defaultRole = 'Default role';
+    private string $defaultRole = 'Project Manager';
 
     /**
      * Run the database seeds.
@@ -81,7 +81,7 @@ class PermissionsSeeder extends Seeder
             ]);
         }
 
-        // Create default role
+        // Create Project Manager
         $role = Role::firstOrCreate([
             'name' => $this->defaultRole
         ]);
@@ -89,10 +89,10 @@ class PermissionsSeeder extends Seeder
         $settings->default_role = $role->id;
         $settings->save();
 
-        // Add all permissions to default role
+        // Add all permissions to Project Manager
         $role->syncPermissions(Permission::all()->pluck('name')->toArray());
 
-        // Assign default role to first database user
+        // Assign Project Manager to first database user
         if ($user = User::first()) {
             $user->syncRoles([$this->defaultRole]);
         }

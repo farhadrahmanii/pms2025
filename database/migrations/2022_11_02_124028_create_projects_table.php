@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->longText('description')->nullable();
             $table->foreignId('owner_id')->constrained('users');
             $table->foreignId('status_id')->constrained('project_statuses');
+            $table->string('service_type')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -1,6 +1,7 @@
 @php($record = $this->record)
 <x-filament::page>
 
+
     <a href="{{ route('filament.pages.kanban/{project}', ['project' => $record->project->id]) }}"
        class="flex items-center gap-1 text-gray-500 hover:text-gray-700 font-medium text-xs">
         <x-heroicon-o-arrow-left class="w-4 h-4"/> {{ __('Back to kanban board') }}
@@ -10,6 +11,7 @@
 
         <x-filament::card class="md:w-2/3 w-full flex flex-col gap-5">
             <div class="w-full flex flex-col gap-0">
+                
                 <div class="flex items-center gap-2">
                     <span class="flex items-center gap-1 text-sm text-primary-500 font-medium">
                         <x-heroicon-o-ticket class="w-4 h-4"/>
@@ -52,6 +54,9 @@
         </x-filament::card>
 
         <x-filament::card class="md:w-1/3 w-full flex flex-col">
+            
+    {{-- Ticket Rating Summary Widget --}}
+    <x-ticket-rating-summary :avg="$record->averageRating()" :user-stars="$record->userAverageRating()" />
             <div class="w-full flex flex-col gap-1" wire:ignore>
                 <span class="text-gray-500 text-sm font-medium">
                     {{ __('Owner') }}
@@ -215,6 +220,7 @@
                     </div>
                 </div>
             @endif
+
         </x-filament::card>
 
     </div>

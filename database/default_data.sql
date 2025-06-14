@@ -94,7 +94,7 @@ INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at
 (46, 'Manage general settings', 'web', '2022-11-14 12:06:56', '2022-11-14 12:06:56');
 
 INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'Default role', 'web', '2022-11-14 12:06:56', '2022-11-14 12:06:56');
+(1, 'Project Manager', 'web', '2022-11-14 12:06:56', '2022-11-14 12:06:56');
 
 INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (1, 1),

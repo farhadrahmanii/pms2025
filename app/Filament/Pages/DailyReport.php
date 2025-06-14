@@ -14,14 +14,18 @@ class DailyReport extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static string $view = 'filament.pages.daily-report';
+    protected static ?string $navigationTitle = "Daily Task & Report";
 
     public $report = [];
     public $date;
+
+    public $rejectedTickets;
 
     public function mount()
     {
         $this->date = now()->toDateString();
         $this->generateReport();
+        $this->rejectedTickets = Ticket::where('approved', -1)->where('owner_id', auth()->id())->get();
     }
 
     public function updatedDate()

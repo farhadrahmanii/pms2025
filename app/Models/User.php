@@ -20,17 +20,24 @@ use ProtoneMedia\LaravelVerifyNewEmail\MustVerifyNewEmail;
 use Ramsey\Uuid\Uuid;
 use Spatie\Permission\Traits\HasRoles;
 use NotificationChannels\WebPush\HasPushSubscriptions;
+use willvincent\Rateable\Rateable;
+use willvincent\Rateable\Rating;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable,
-        HasRoles, HasAvatarUrl, SoftDeletes, MustVerifyNewEmail , HasPushSubscriptions;
+        HasRoles, HasAvatarUrl, SoftDeletes, MustVerifyNewEmail, HasPushSubscriptions , Rateable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
     protected $fillable = [
         'name',
         'photo',

@@ -17,8 +17,14 @@ class Project extends Model implements HasMedia
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
-        'name', 'description', 'status_id', 'owner_id', 'ticket_prefix',
-        'status_type', 'type'
+        'name',
+        'description',
+        'status_id',
+        'owner_id',
+        'ticket_prefix',
+        'status_type',
+        'type',
+        'service_type'
     ];
 
     protected $appends = [
@@ -101,8 +107,8 @@ class Project extends Model implements HasMedia
     {
         return new Attribute(
             get: fn() => $this->media('cover')?->first()?->getFullUrl()
-                ??
-                'https://ui-avatars.com/api/?background=3f84f3&color=ffffff&name=' . $this->name
+            ??
+            'https://ui-avatars.com/api/?background=3f84f3&color=ffffff&name=' . $this->name
         );
     }
 

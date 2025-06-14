@@ -5,6 +5,7 @@ namespace App\Filament\Resources\TicketResource\Pages;
 use App\Exports\TicketHoursExport;
 use App\Filament\Resources\TicketResource;
 use App\Models\Activity;
+use App\Models\Ticket;
 use App\Models\TicketComment;
 use App\Models\TicketHour;
 use App\Models\TicketSubscriber;
@@ -38,6 +39,8 @@ class ViewTicket extends ViewRecord implements HasForms
 
     public function mount($record): void
     {
+        $Ticket = Ticket::findOrFail($record);
+
         parent::mount($record);
         $this->form->fill();
     }
@@ -45,6 +48,76 @@ class ViewTicket extends ViewRecord implements HasForms
     protected function getActions(): array
     {
         return [
+            Actions\Action::make('rate')
+                ->label('Rate this ticket')
+                ->color('success')
+                ->icon('heroicon-o-star')
+                ->button()
+                ->form([
+                    \Filament\Forms\Components\Select::make('rating')
+                        ->label('Your Rating')
+                        ->options([
+                            1 => '★☆☆☆☆',
+                            2 => '★★☆☆☆',
+                            3 => '★★★☆☆',
+                            4 => '★★★★☆',
+                            5 => '★★★★★',
+                        ])
+                        ->required(),
+                ])
+                ->visible(function () {
+                    $Ticket = \App\Models\Ticket::findOrFail($this->record->id);
+
+
+                    return !$Ticket->ratings()->where('user_id', auth()->id())->exists();
+
+                })
+                ->action(function (array $data) {
+                    $Ticket = Ticket::findOrFail($this->record->id);
+                    $Ticket->rateOnce($data['rating']);
+                    $avg = number_format($Ticket->averageRating, 2);
+                    $this->dispatchBrowserEvent('notification', [
+                        'title' => 'Ticket rated',
+                        'message' => 'You rated this ticket ' . $data['rating'] . ' star(s). Average rating: ' . $avg . ' / 5',
+                        'color' => 'success',
+                    ]);
+                }),
+            Actions\Action::make('editRating')
+                ->label('Edit your rating')
+                ->color('warning')
+                ->icon('heroicon-o-pencil')
+                ->button()
+                ->form([
+                    \Filament\Forms\Components\Select::make('rating')
+                        ->label('Your Rating')
+                        ->options([
+                            1 => '★☆☆☆☆',
+                            2 => '★★☆☆☆',
+                            3 => '★★★☆☆',
+                            4 => '★★★★☆',
+                            5 => '★★★★★',
+                        ])
+                        ->required()
+                        ->default(function () {
+                            $Ticket = \App\Models\Ticket::findOrFail($this->record->id);
+                            $rating = $Ticket->ratings()->where('user_id', auth()->id())->first();
+                            return $rating ? $rating->rating : null;
+                        }),
+                ])
+                ->visible(function () {
+                    $Ticket = \App\Models\Ticket::findOrFail($this->record->id);
+                    return $Ticket->ratings()->where('user_id', auth()->id())->exists();
+                })
+                ->action(function (array $data) {
+                    $Ticket = Ticket::findOrFail($this->record->id);
+                    $Ticket->rateOnce($data['rating']);
+                    $avg = number_format($Ticket->averageRating, 2);
+                    $this->dispatchBrowserEvent('notification', [
+                        'title' => 'Rating updated',
+                        'message' => 'You updated your rating to ' . $data['rating'] . ' star(s). Average rating: ' . $avg . ' / 5',
+                        'color' => 'warning',
+                    ]);
+                }),
             Actions\Action::make('toggleSubscribe')
                 ->label(
                     fn() => $this->record->subscribers()->where('users.id', auth()->user()->id)->count() ?
@@ -140,6 +213,7 @@ class ViewTicket extends ViewRecord implements HasForms
                         \Maatwebsite\Excel\Excel::XLSX,
                         ['Content-Type' => 'text/xlsx']
                     )),
+
             ])
                 ->visible(fn() => (in_array(
                     auth()->user()->id,
@@ -153,7 +227,7 @@ class ViewTicket extends ViewRecord implements HasForms
                 ->label(__('Approve'))
                 ->color('success')
                 ->icon('heroicon-o-check')
-                ->visible(fn() => $this->record->approved !== 1 && auth()->user()->hasRole('Default role'))
+                ->visible(fn() => $this->record->approved !== 1 && auth()->user()->hasRole('Project Manager'))
                 ->action(function () {
                     $this->record->approved = 1;
                     $this->record->save();
@@ -164,9 +238,9 @@ class ViewTicket extends ViewRecord implements HasForms
                 ->label(__('reject'))
                 ->color('danger')
                 ->icon('heroicon-o-x-circle')
-                ->visible(fn() => auth()->user()->hasRole('Default role') && $this->record->approved === 1)
+                ->visible(fn() => auth()->user()->hasRole('Project Manager') && $this->record->approved === 1 || $this->record->approved === -1)
                 ->action(function () {
-                    $this->record->approved = 0;
+                    $this->record->approved = -1;
                     $this->record->save();
                     $this->notify('danger', __('Rejected successfully.'));
                     $this->record->refresh();

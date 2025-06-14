@@ -21,7 +21,8 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Support\HtmlString;
-
+use IbrahimBougaoua\FilaProgress\Tables\Columns\CircleProgress;
+use IbrahimBougaoua\FilaProgress\Tables\Columns\ProgressBar;
 class TicketResource extends Resource
 {
     protected static ?string $model = Ticket::class;
@@ -249,6 +250,47 @@ class TicketResource extends Resource
                 ->searchable();
         }
         $columns = array_merge($columns, [
+            CircleProgress::make('Time')
+                ->getStateUsing(function ($record) {
+                    if (!$record->end_date) {
+                        return [
+                            'total' => 1,
+                            'progress' => 0,
+                        ];
+                    }
+                    $endDate = \Carbon\Carbon::parse($record->end_date)->startOfDay();
+                    $now = now()->startOfDay();
+
+                    // If end_date is today, show "expire today" (orange)
+                    if ($endDate->equalTo($now)) {
+                        return [
+                            'total' => 1,
+                            'progress' => 1,
+                        ];
+                    }
+
+                    // If end_date is before today, show "expired" (red)
+                    if ($endDate->lessThan($now)) {
+                        return [
+                            'total' => 1,
+                            'progress' => 1,
+                        ];
+                    }
+
+                    // Otherwise, show progress towards expiration
+                    $createdAt = $record->created_at ? \Carbon\Carbon::parse($record->created_at)->startOfDay() : $now;
+                    $totalPeriod = $createdAt->diffInDays($endDate, false);
+                    $elapsed = $createdAt->diffInDays($now, false);
+
+                    $progress = $totalPeriod > 0 ? min(1, max(0, $elapsed / $totalPeriod)) : 0;
+
+
+                    return [
+                        'total' => 1,
+                        'progress' => $progress,
+                    ];
+                }),
+
             Tables\Columns\TextColumn::make('name')
                 ->label(__('Ticket name'))
                 ->sortable()
@@ -298,11 +340,11 @@ class TicketResource extends Resource
                 ->sortable()
                 ->searchable(),
 
-            Tables\Columns\TextColumn::make('created_at')
-                ->label(__('Created at'))
-                ->formatStateUsing(fn($record) => $record->created_at->diffForHumans())
-                ->sortable()
-                ->searchable(),
+            // Tables\Columns\TextColumn::make('created_at')
+            //     ->label(__('Created at'))
+            //     ->formatStateUsing(fn($record) => $record->created_at->diffForHumans())
+            //     ->sortable()
+            //     ->searchable(),
         ]);
         return $columns;
     }
@@ -312,6 +354,12 @@ class TicketResource extends Resource
         return $table
             ->columns(self::tableColumns())
             ->filters([
+                Tables\Filters\Filter::make('expire_today')
+                    ->label(__('Expire Today'))
+                    ->query(function ($query) {
+                        $today = now()->toDateString();
+                        $query->whereDate('end_date', $today);
+                    }),
                 Tables\Filters\SelectFilter::make('project_id')
                     ->label(__('Project'))
                     ->multiple()
@@ -352,7 +400,7 @@ class TicketResource extends Resource
                     ->label(__('Approve'))
                     ->color('success')
                     ->icon('heroicon-o-check')
-                    ->visible(fn($record) => auth()->user()->can('Update ticket') && $record->approved !== 1 && $record->responsible_id !== auth()->user()->id)
+                    ->visible(fn($record) => auth()->user()->hasRole('Project Manager') && $record->approved !== 1 && $record->responsible_id !== auth()->user()->id)
                     ->action(fn($record) => $record->update([
                         $record->approved_by = auth()->user()->id,
                         $record->approved = 1,
@@ -363,8 +411,8 @@ class TicketResource extends Resource
                     ->label(__('reject'))
                     ->color('danger')
                     ->icon('heroicon-o-x-circle')
-                    ->visible(fn($record) => auth()->user()->can('Update ticket') && $record->approved !== 0 && $record->responsible_id !== auth()->user()->id)
-                    ->action(fn($record) => $record->update([
+                    ->visible(fn($record) => auth()->user()->hasRole('Project Manager') && $record->approved !== 0 && $record->responsible_id !== auth()->user()->id)
+                    ->action(action: fn($record) => $record->update([
                         $record->approved_by = auth()->user()->id,
                         $record->approved = 0,
                     ]))
@@ -372,7 +420,7 @@ class TicketResource extends Resource
                     ->after(fn($record) => $record->refresh()),
             ])
             ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                // Tables\Actions\DeleteBulkAction::make(),
             ]);
     }
 

@@ -71,9 +71,26 @@ class ProjectResource extends Resource
                                                 Forms\Components\TextInput::make('name')
                                                     ->label(__('Project name'))
                                                     ->required()
-                                                    ->columnSpan(10)
+                                                    ->columnSpan(6)
                                                     ->maxLength(255),
-
+                                                Forms\Components\Select::make('service_type')
+                                                    ->label(__('Project type'))
+                                                    ->searchable()
+                                                    ->options([
+                                                        'logistic' => __('Logistic Project'),
+                                                        'mining' => __('Mining Project'),
+                                                        'construction' => __('Construction Project'),
+                                                        'it' => __('IT Project'),
+                                                        'manufacturing' => __('Manufacturing Project'),
+                                                        'research' => __('Research Project'),
+                                                        'marketing' => __('Marketing Project'),
+                                                        'education' => __('Education Project'),
+                                                        'healthcare' => __('Healthcare Project'),
+                                                        'finance' => __('Finance Project'),
+                                                        'other' => __('Other'),
+                                                    ])
+                                                    ->required()
+                                                    ->columnSpan(4),
                                                 Forms\Components\TextInput::make('ticket_prefix')
                                                     ->label(__('Ticket prefix'))
                                                     ->maxLength(3)

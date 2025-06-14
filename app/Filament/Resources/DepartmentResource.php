@@ -45,23 +45,26 @@ class DepartmentResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name'),
-                Tables\Columns\TextColumn::make('users.name')
-                    ->label('Users')
-                    ->limit(3)
+                Tables\Columns\TextColumn::make('name')
                     ->sortable()
-                    ->label(__('User')),
+                    ->searchable()
+                ,
                 Tables\Columns\ImageColumn::make('users.0.photo')
                     ->label('Photos')
                     ->rounded(),
-                Tables\Columns\TextColumn::make('description'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime(),
+                Tables\Columns\TextColumn::make('users.name')
+                    ->label('Users')
+                    ->searchable()
+                    ->label(__('User')),
+                // Tables\Columns\TextColumn::make('created_at')
+                //     ->dateTime()
+                //     ,
+                // Tables\Columns\TextColumn::make('updated_at')
+                //     ->dateTime()
+                //     ,
             ])
             ->filters([
-                //
+
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
