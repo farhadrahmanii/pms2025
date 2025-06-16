@@ -414,7 +414,7 @@ class TicketResource extends Resource
                     ->visible(fn($record) => auth()->user()->hasRole('Project Manager') && $record->approved !== 0 && $record->responsible_id !== auth()->user()->id)
                     ->action(action: fn($record) => $record->update([
                         $record->approved_by = auth()->user()->id,
-                        $record->approved = 0,
+                        $record->approved = -1,
                     ]))
                     ->after(fn($record) => $record->notify('success', __('Ticket approved successfully.')))
                     ->after(fn($record) => $record->refresh()),

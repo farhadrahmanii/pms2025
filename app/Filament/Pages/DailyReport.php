@@ -25,7 +25,13 @@ class DailyReport extends Page
     {
         $this->date = now()->toDateString();
         $this->generateReport();
-        $this->rejectedTickets = Ticket::where('approved', -1)->where('owner_id', auth()->id())->get();
+        $userId = auth()->id();
+        $this->rejectedTickets = Ticket::where('approved', -1)
+            ->where(function ($q) use ($userId) {
+                $q->where('owner_id', $userId)
+                    ->orWhere('responsible_id', $userId);
+            })
+            ->get();
     }
 
     public function updatedDate()
@@ -39,7 +45,11 @@ class DailyReport extends Page
         $tickets = Ticket::where(function ($q) use ($user) {
             $q->where('responsible_id', $user->id);
         })
-            ->whereDate('updated_at', $this->date)
+            ->whereDate('updated_at', '<=', $this->date)
+            ->whereHas('status', function ($q) {
+                $q->whereIn('name', ['Todo', 'In progress']);
+            })
+            ->where('approved', '!=', -1)
             ->get();
         $this->report = $tickets;
     }

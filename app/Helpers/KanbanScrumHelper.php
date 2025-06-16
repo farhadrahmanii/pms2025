@@ -137,6 +137,8 @@ trait KanbanScrumHelper
                         });
                 });
         });
+        $query->where('approved', '!=', -1)
+            ->where('approved', '!=', 0);
         return $query->get()
             ->map(fn(Ticket $item) => [
                 'id' => $item->id,

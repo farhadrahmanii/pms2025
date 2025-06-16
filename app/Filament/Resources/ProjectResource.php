@@ -216,7 +216,6 @@ class ProjectResource extends Resource
                     ->label(__('Owner'))
                     ->multiple()
                     ->options(fn() => User::all()->pluck('name', 'id')->toArray()),
-
                 Tables\Filters\SelectFilter::make('status_id')
                     ->label(__('Status'))
                     ->multiple()
@@ -260,9 +259,9 @@ class ProjectResource extends Resource
                         ->color('secondary')
                         ->action(fn($record) => Excel::download(
                             new ProjectHoursExport($record),
-                            'time_' . Str::slug($record->name) . '.csv',
-                            \Maatwebsite\Excel\Excel::CSV,
-                            ['Content-Type' => 'text/csv']
+                            'time_' . Str::slug($record->name) . '.xlsx',
+                            \Maatwebsite\Excel\Excel::XLSX,
+                            ['Content-Type' => 'text/xlsx']
                         )),
 
                     Tables\Actions\Action::make('kanban')

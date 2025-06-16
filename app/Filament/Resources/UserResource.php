@@ -65,6 +65,7 @@ class UserResource extends Resource
                                 Forms\Components\TextInput::make('password')
                                     ->label(__('Password'))
                                     ->password()
+                                    ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
                                     ->required()
                                     ->maxLength(255)
                                     ->helperText('Leave blank if you don\'t want to change the password')
