@@ -65,7 +65,7 @@ class UserResource extends Resource
                                 Forms\Components\TextInput::make('password')
                                     ->label(__('Password'))
                                     ->password()
-                                    ->dehydrateStateUsing(fn ($state) => filled($state) ? bcrypt($state) : null)
+                                    ->dehydrateStateUsing(fn($state) => filled($state) ? bcrypt($state) : null)
                                     ->required()
                                     ->maxLength(255)
                                     ->helperText('Leave blank if you don\'t want to change the password')
@@ -73,7 +73,6 @@ class UserResource extends Resource
 
                                 Forms\Components\CheckboxList::make('roles')
                                     ->label(__('Permission roles'))
-                                    ->required()
                                     ->columns(3)
                                     ->relationship('roles', 'name'),
                                 Forms\Components\FileUpload::make('photo')
@@ -85,6 +84,66 @@ class UserResource extends Resource
                                         __('If not selected, an image will be generated based on the project name')
                                     )
                                 ,
+                                // Group permissions by type and display in collapsible sections
+                                // Only allow assigning permissions that the current user already has
+                                Forms\Components\Hidden::make('current_user_permissions')
+                                    ->default(auth()->user()?->getAllPermissions()->pluck('id')->toArray() ?? []),
+
+                                Forms\Components\Grid::make()
+                                    ->columns(3)
+                                    ->schema(
+                                        \Spatie\Permission\Models\Permission::query()
+                                            ->select('type')
+                                            ->distinct()
+                                            ->pluck('type')
+                                            ->map(function ($type, $index) {
+                                                return Forms\Components\Section::make(__($type . ' Permissions'))
+                                                    ->schema([
+                                                        Forms\Components\CheckboxList::make('permissions')
+                                                            ->label(__('Permissions'))
+                                                            ->columns(2)
+                                                            ->relationship('permissions', 'name')
+                                                            ->options(
+                                                                // Only show permissions the current user has
+                                                                \Spatie\Permission\Models\Permission::where('type', $type)
+                                                                    ->whereIn(
+                                                                        'id',
+                                                                        auth()->user()?->getAllPermissions()->pluck('id')->toArray() ?? []
+                                                                    )
+                                                                    ->pluck('name', 'id')
+                                                            )
+                                                            ->helperText(__('Assign permissions directly to this user')),
+                                                    ])
+                                                    ->collapsible()
+                                                    ->collapsed($index !== 0)
+                                                    ->columnSpan(1);
+                                            })->values()->toArray()
+                                    ),
+                                Forms\Components\Grid::make()
+                                    ->columns(3)
+                                    ->schema(
+                                        \Spatie\Permission\Models\Permission::query()
+                                            ->select('type')
+                                            ->distinct()
+                                            ->pluck('type')
+                                            ->map(function ($type, $index) {
+                                                return Forms\Components\Section::make(__($type . ' Permissions'))
+                                                    ->schema([
+                                                        Forms\Components\CheckboxList::make('permissions')
+                                                            ->label(__('Permissions'))
+                                                            ->columns(2)
+                                                            ->relationship('permissions', 'name')
+                                                            ->options(
+                                                                \Spatie\Permission\Models\Permission::where('type', $type)
+                                                                    ->pluck('name', 'id')
+                                                            )
+                                                            ->helperText(__('Assign permissions directly to this user')),
+                                                    ])
+                                                    ->collapsible()
+                                                    ->collapsed($index !== 0)
+                                                    ->columnSpan(1);
+                                            })->values()->toArray()
+                                    ),
                             ]),
                     ])
             ]);

@@ -21,6 +21,36 @@ class DepartmentResource extends Resource
 {
     protected static ?string $model = Department::class;
 
+    public static function canEdit(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasRole('Project Manager');
+    }
+
+    public static function canUpdate(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasRole('Project Manager');
+    }
+
+    public static function canDelete(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasRole('Project Manager');
+    }
+
+    public static function canCreate(): bool
+    {
+        return auth()->user()?->hasRole('Project Manager');
+    }
+
+    public static function canView(\Illuminate\Database\Eloquent\Model $record): bool
+    {
+        return auth()->user()?->hasRole('Project Manager');
+    }
+
+    public static function canViewAny(): bool
+    {
+        return auth()->user()?->hasRole('Project Manager');
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-user';
 
     public static function form(Form $form): Form
