@@ -15,6 +15,10 @@ class DailyReport extends Page
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static string $view = 'filament.pages.daily-report';
     protected static ?string $navigationTitle = "Daily Task & Report";
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     public $report = [];
     public $date;

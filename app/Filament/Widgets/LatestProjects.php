@@ -25,7 +25,9 @@ class LatestProjects extends BaseWidget
 
     public static function canView(): bool
     {
-        return auth()->user()->can('List projects');
+        // return auth()->user()->can('List projects');
+        return false;
+
     }
     protected function getActions(): array
     {

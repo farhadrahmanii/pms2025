@@ -11,6 +11,11 @@ class TicketApprovel extends Page
 
     protected static string $view = 'filament.pages.ticket-approvel';
 
+    protected static function getNavigationLabel(): string
+    {
+        return __('Task Approvel');
+    }
+
     public $tickets;
     public $rejectedTickets;
 

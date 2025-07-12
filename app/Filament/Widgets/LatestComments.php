@@ -29,7 +29,9 @@ class LatestComments extends BaseWidget
 
     public static function canView(): bool
     {
-        return auth()->user()->can('List tickets');
+        // return auth()->user()->can('List tickets');
+        return false;
+
     }
 
     protected function isTablePaginationEnabled(): bool
@@ -104,7 +106,7 @@ class LatestComments extends BaseWidget
                 ])
                 ->action(
                     fn($record) =>
-                        redirect()->to(route('filament.resources.tickets.share', $record->ticket->code))
+                    redirect()->to(route('filament.resources.tickets.share', $record->ticket->code))
                 )
         ];
     }

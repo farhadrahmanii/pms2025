@@ -23,6 +23,10 @@ class ActivityResource extends Resource
     {
         return __('Activities');
     }
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     public static function getPluralLabel(): ?string
     {

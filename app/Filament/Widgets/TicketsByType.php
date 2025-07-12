@@ -18,7 +18,9 @@ class TicketsByType extends DoughnutChartWidget
 
     public static function canView(): bool
     {
-        return auth()->user()->can('List tickets');
+        // return auth()->user()->can('List tickets');
+        return false;
+
     }
 
     protected function getHeading(): string

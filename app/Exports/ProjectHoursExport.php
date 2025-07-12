@@ -22,7 +22,7 @@ class ProjectHoursExport implements FromCollection, WithHeadings
     {
         return [
             '#',
-            'Ticket',
+            'Task',
             'User',
             'Time',
             'Hours',

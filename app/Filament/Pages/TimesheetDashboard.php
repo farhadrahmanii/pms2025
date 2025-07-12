@@ -12,10 +12,14 @@ class TimesheetDashboard extends Page
     protected static ?string $slug = 'timesheet-dashboard';
 
     protected static ?int $navigationSort = 2;
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     protected static string $view = 'filament::pages.dashboard';
 
-    protected function getColumns(): int | array
+    protected function getColumns(): int|array
     {
         return 6;
     }
@@ -30,10 +34,10 @@ class TimesheetDashboard extends Page
         return __('Timesheet');
     }
 
-    protected static function shouldRegisterNavigation(): bool
-    {
-        return auth()->user()->can('View timesheet dashboard');
-    }
+    // protected static function shouldRegisterNavigation(): bool
+    // {
+    //     return auth()->user()->can('View timesheet dashboard');
+    // }
 
     protected function getWidgets(): array
     {

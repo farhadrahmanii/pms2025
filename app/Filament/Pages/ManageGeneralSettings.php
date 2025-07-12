@@ -19,6 +19,8 @@ class ManageGeneralSettings extends SettingsPage
 {
     protected static ?string $navigationIcon = 'heroicon-o-cog';
 
+
+
     protected static string $settings = GeneralSettings::class;
 
     protected static function shouldRegisterNavigation(): bool

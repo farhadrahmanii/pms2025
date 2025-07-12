@@ -55,15 +55,15 @@ class Dashboard extends BasePage
         }
 
         if ($user->hasRole('Project Manager')) {
-            $actions[] = Action::make('create-ticket')
-                ->label(__('Create ticket'))
+            $actions[] = Action::make('create-Task')
+                ->label(__('Create Task'))
                 ->url(fn(): string => route('filament.resources.tickets.create'))
                 ->icon('heroicon-o-plus-circle');
         }
 
         if ($user->hasRole('Project Manager')) {
-            $actions[] = Action::make('list-tickets')
-                ->label(__('Show all tickets'))
+            $actions[] = Action::make('list-Tasks')
+                ->label(__('Show all Tasks'))
                 ->color('secondary')
                 ->url(fn(): string => route('filament.resources.tickets.index'))
                 ->icon('heroicon-o-view-list');

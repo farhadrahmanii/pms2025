@@ -1,5 +1,4 @@
 <?php
-
 return [
 
     /*
@@ -11,7 +10,9 @@ return [
     | in admin panel.
     |
     */
-
+    'navigation' => [
+        'visible' => false,
+    ],
     'pages' => [
         'backups' => \ShuvroRoy\FilamentSpatieLaravelBackup\Pages\Backups::class
     ],

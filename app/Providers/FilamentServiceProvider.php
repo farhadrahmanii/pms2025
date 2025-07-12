@@ -26,14 +26,14 @@ class FilamentServiceProvider extends ServiceProvider
         Filament::serving(function () {
             $user = auth()->user();
 
-            Filament::registerNavigationItems([
-                // Chat Room link (custom)
-                NavigationItem::make()
-                    ->label('Chat Room')
-                    ->icon('heroicon-o-chat')
-                    ->url('/chatify')
-                    ->sort(100),
-            ]);
+            // Filament::registerNavigationItems([
+            //     // Chat Room link (custom)
+            //     NavigationItem::make()
+            //         ->label('Chat Room')
+            //         ->icon('heroicon-o-chat')
+            //         ->url('/chatify')
+            //         ->sort(100),
+            // ]);
         });
     }
 }

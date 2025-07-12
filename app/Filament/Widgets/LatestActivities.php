@@ -30,7 +30,9 @@ class LatestActivities extends BaseWidget
 
     public static function canView(): bool
     {
-        return auth()->user()->can('List tickets');
+        // return auth()->user()->can('List tickets');
+        return false;
+
     }
 
     protected function isTablePaginationEnabled(): bool
@@ -76,8 +78,8 @@ class LatestActivities extends BaseWidget
                         </span>
                         <div class="w-full flex items-center gap-2 text-sm">
                             <span style="color: ' . $record->oldStatus->color . '">'
-                                . $record->oldStatus->name
-                            . '</span>
+                        . $record->oldStatus->name
+                        . '</span>
                             <span class="text-gray-500">' . __('To') . '</span>
                             <span style="color: ' . $record->newStatus->color . '">
                                 ' . $record->newStatus->name . '

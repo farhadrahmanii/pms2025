@@ -19,6 +19,11 @@ class Kanban extends Page implements HasForms
 
     protected static ?string $slug = 'kanban/{project}';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     protected static string $view = 'filament.pages.kanban';
 
     protected static bool $shouldRegisterNavigation = false;

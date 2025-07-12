@@ -24,7 +24,9 @@ class LatestTickets extends BaseWidget
 
     public static function canView(): bool
     {
-        return auth()->user()->can('List tickets');
+        // return auth()->user()->can('List tickets');
+        return false;
+
     }
 
     protected function getTableQuery(): Builder
@@ -70,9 +72,9 @@ class LatestTickets extends BaseWidget
                         ' . ($record->responsible ? '
                         <div class="flex items-center gap-3">
                             <div class="flex items-center gap-1 text-xs text-gray-400">'
-                        . view('components.user-avatar', ['user' => $record->responsible])
-                        . '<span>' . $record->responsible?->name . '</span>'
-                        . '</div>
+                    . view('components.user-avatar', ['user' => $record->responsible])
+                    . '<span>' . $record->responsible?->name . '</span>'
+                    . '</div>
                         </div>' : '') . '
                     </div>
                 ')),

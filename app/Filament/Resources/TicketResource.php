@@ -33,7 +33,7 @@ class TicketResource extends Resource
 
     protected static function getNavigationLabel(): string
     {
-        return __('Tickets');
+        return __('Tasks');
     }
 
     public static function getPluralLabel(): ?string

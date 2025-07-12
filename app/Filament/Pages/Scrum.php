@@ -21,6 +21,11 @@ class Scrum extends Page implements HasForms
 
     protected static string $view = 'filament.pages.scrum';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     protected static bool $shouldRegisterNavigation = false;
 
     protected $listeners = [

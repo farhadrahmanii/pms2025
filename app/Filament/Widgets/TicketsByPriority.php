@@ -18,12 +18,13 @@ class TicketsByPriority extends DoughnutChartWidget
 
     public static function canView(): bool
     {
-        return auth()->user()->can('List tickets');
+        // return auth()->user()->can('List Tasks');
+        return false;
     }
 
     protected function getHeading(): string
     {
-        return __('Tickets by priorities');
+        return __('Tasks by priorities');
     }
 
     protected function getData(): array
@@ -32,7 +33,7 @@ class TicketsByPriority extends DoughnutChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => __('Tickets by priorities'),
+                    'label' => __('Tasks by priorities'),
                     'data' => $data->pluck('tickets_count')->toArray(),
                     'backgroundColor' => [
                         'rgba(255, 99, 132, .6)',

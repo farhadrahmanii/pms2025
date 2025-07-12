@@ -21,7 +21,7 @@ class TicketStatusResource extends Resource
 
     protected static function getNavigationLabel(): string
     {
-        return __('Ticket statuses');
+        return __('Task statuses');
     }
 
     public static function getPluralLabel(): ?string

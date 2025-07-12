@@ -20,6 +20,11 @@ class Board extends Page implements HasForms
     protected static string $view = 'filament.pages.board';
 
     protected static ?string $slug = 'board';
+    
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     protected static ?int $navigationSort = 4;
 
@@ -56,7 +61,7 @@ class Board extends Page implements HasForms
                                 ->required()
                                 ->searchable()
                                 ->reactive()
-                                ->afterStateUpdated(fn () => $this->search())
+                                ->afterStateUpdated(fn() => $this->search())
                                 ->helperText(__("Choose a project to show it's board"))
                                 ->options(fn() => Project::where('owner_id', auth()->user()->id)
                                     ->orWhereHas('users', function ($query) {

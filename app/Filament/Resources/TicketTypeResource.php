@@ -23,7 +23,7 @@ class TicketTypeResource extends Resource
 
     protected static function getNavigationLabel(): string
     {
-        return __('Ticket types');
+        return __('Task types');
     }
 
     public static function getPluralLabel(): ?string
