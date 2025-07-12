@@ -30,43 +30,61 @@ class Dashboard extends BasePage
 
     protected function getActions(): array
     {
-        return [
-            ActionGroup::make([
+        $user = auth()->user();
+
+        // Example: Only show actions if user has the required role
+        // You can adjust the logic to check for specific permissions as needed
+
+        $actions = [];
+
+        if ($user->hasRole('Project Manager')) {
+            $actions[] = ActionGroup::make([
                 Action::make('daily-report')
                     ->label(__('Daily Report'))
                     ->url('/daily-report')
-                    ->icon('heroicon-o-plus-circle')
-                // ->authorize('daily Report')
-                ,
-            ]),
-            Action::make('list-projects')
+                    ->icon('heroicon-o-plus-circle'),
+            ]);
+        }
+
+        if ($user->hasRole('Project Manager')) {
+            $actions[] = Action::make('list-projects')
                 ->label(__('Show all projects'))
                 ->color('secondary')
                 ->url(fn(): string => route('filament.resources.projects.index'))
-                ->icon('heroicon-o-view-list'),
-            Action::make('create-ticket')
+                ->icon('heroicon-o-view-list');
+        }
+
+        if ($user->hasRole('Project Manager')) {
+            $actions[] = Action::make('create-ticket')
                 ->label(__('Create ticket'))
                 ->url(fn(): string => route('filament.resources.tickets.create'))
-                ->icon('heroicon-o-plus-circle'),
+                ->icon('heroicon-o-plus-circle');
+        }
 
-            Action::make('list-tickets')
+        if ($user->hasRole('Project Manager')) {
+            $actions[] = Action::make('list-tickets')
                 ->label(__('Show all tickets'))
                 ->color('secondary')
                 ->url(fn(): string => route('filament.resources.tickets.index'))
-                ->icon('heroicon-o-view-list'),
+                ->icon('heroicon-o-view-list');
+        }
 
-            Action::make('create-user')
+        if ($user->hasRole('Project Manager')) {
+            $actions[] = Action::make('create-user')
                 ->label(__('Create user'))
                 ->url(fn(): string => route('filament.resources.users.create'))
-                ->icon('heroicon-o-plus-circle'),
+                ->icon('heroicon-o-plus-circle');
+        }
 
-            Action::make('list-users')
+        if ($user->hasRole('Project Manager')) {
+            $actions[] = Action::make('list-users')
                 ->label(__('Show all users'))
                 ->color('secondary')
                 ->url(fn(): string => route('filament.resources.users.index'))
-                ->icon('heroicon-o-view-list'),
+                ->icon('heroicon-o-view-list');
+        }
 
-        ];
+        return $actions;
     }
 
     protected function getWidgets(): array

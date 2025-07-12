@@ -318,7 +318,6 @@ return [
     'middleware' => [
         'auth' => [
             Authenticate::class,
-            'verified'
         ],
         'base' => [
             EncryptCookies::class,

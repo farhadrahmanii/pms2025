@@ -25,20 +25,20 @@ class FavoriteProjects extends BaseWidget
     {
         return auth()->user()->can('List projects');
     }
-    protected function getActions(): array
-    {
-        return [
-            Action::make('daily-report')
-                ->label(__('Daily Report'))
-                ->url('/daily-report')
-                ->icon('heroicon-o-plus-circle'),
-            Action::make('list-projects')
-                ->label(__('Show all projects'))
-                ->color('secondary')
-                ->url(fn(): string => route('filament.resources.projects.index'))
-                ->icon('heroicon-o-view-list'),
-        ];
-    }
+    // protected function getActions(): array
+    // {
+    //     return [
+    //         Action::make('daily-report')
+    //             ->label(__('Daily Report'))
+    //             ->url('/daily-report')
+    //             ->icon('heroicon-o-plus-circle'),
+    //         Action::make('list-projects')
+    //             ->label(__('Show all projects'))
+    //             ->color('secondary')
+    //             ->url(fn(): string => route('filament.resources.projects.index'))
+    //             ->icon('heroicon-o-view-list'),
+    //     ];
+    // }
 
     protected function getCards(): array
     {

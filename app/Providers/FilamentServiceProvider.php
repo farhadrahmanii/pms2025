@@ -24,12 +24,15 @@ class FilamentServiceProvider extends ServiceProvider
     public function boot()
     {
         Filament::serving(function () {
+            $user = auth()->user();
+
             Filament::registerNavigationItems([
+                // Chat Room link (custom)
                 NavigationItem::make()
                     ->label('Chat Room')
                     ->icon('heroicon-o-chat')
-                    ->url('/chatify') // adjust URL as needed
-                    ->sort(100), // lower value = higher in menu
+                    ->url('/chatify')
+                    ->sort(100),
             ]);
         });
     }
