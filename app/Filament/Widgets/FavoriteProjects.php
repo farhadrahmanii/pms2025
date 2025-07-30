@@ -9,11 +9,11 @@ use Illuminate\Support\HtmlString;
 use Filament\Pages\Actions\ActionGroup;
 class FavoriteProjects extends BaseWidget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
     protected int|string|array $columnSpan = [
         'sm' => 1,
         'md' => 6,
-        'lg' => 6
+        'lg' => 12
     ];
 
     protected function getColumns(): int

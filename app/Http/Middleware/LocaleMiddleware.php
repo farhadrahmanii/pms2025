@@ -16,7 +16,12 @@ class LocaleMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        app()->setLocale(config('app.locale'));
+        // Set the application locale to Persian (fa)
+        app()->setLocale('fa');
+        
+        // Also set the fallback locale
+        app()->setFallbackLocale('fa');
+        
         return $next($request);
     }
 }

@@ -14,12 +14,12 @@ return [
     /**
      * Whether to login the user after successfully verifying its email.
      */
-    'login_after_verification' => true,
+    'login_after_verification' => false,
 
     /**
      * Should the user be permanently "remembered" by the application.
      */
-    'login_remember' => false,
+    'login_remember' => true,
 
     /**
      * Model class that will be used to store and retrieve the tokens.

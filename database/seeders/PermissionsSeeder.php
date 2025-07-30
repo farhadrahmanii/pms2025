@@ -96,5 +96,24 @@ class PermissionsSeeder extends Seeder
         if ($user = User::first()) {
             $user->syncRoles([$this->defaultRole]);
         }
+
+
+        // project report permission
+        Permission::firstOrCreate([
+            'name' => 'View project report',
+            'type' => 'Project Report'
+        ]);
+        Permission::firstOrCreate([
+            'name' => 'Create project report',
+            'type' => 'Project Report'
+        ]);
+        Permission::firstOrCreate([
+            'name' => 'Update project report',
+            'type' => 'Project Report'
+        ]);
+        Permission::firstOrCreate([
+            'name' => 'Delete project report',
+            'type' => 'Project Report'
+        ]);
     }
 }

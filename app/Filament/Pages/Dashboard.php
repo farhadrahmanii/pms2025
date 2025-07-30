@@ -7,6 +7,7 @@ use App\Filament\Widgets\LatestActivities;
 use App\Filament\Widgets\LatestComments;
 use App\Filament\Widgets\LatestProjects;
 use App\Filament\Widgets\LatestTickets;
+use App\Filament\Widgets\Tickets;
 use App\Filament\Widgets\TicketsByPriority;
 use App\Filament\Widgets\TicketsByType;
 use App\Filament\Widgets\TicketTimeLogged;
@@ -19,7 +20,7 @@ use JibayMcs\FilamentTour\Tour\Step;
 use JibayMcs\FilamentTour\Tour\Tour;
 class Dashboard extends BasePage
 {
-    use HasTour;
+    // use HasTour;
 
     protected static bool $shouldRegisterNavigation = false;
 
@@ -90,6 +91,7 @@ class Dashboard extends BasePage
     protected function getWidgets(): array
     {
         return [
+            Tickets::class,
             FavoriteProjects::class,
             LatestActivities::class,
             LatestComments::class,
@@ -102,19 +104,19 @@ class Dashboard extends BasePage
         ];
     }
 
-    public function tours(): array
-    {
-        return [
-            Tour::make('dashboard')
-                ->steps(
-                    Step::make()
-                        ->title("Welcome to your Project Management System!"),
-                    Step::make('.fi-avatar')
-                        ->title('Woaw ! Here is your avatar !')
-                        ->description('You look nice !')
-                        ->icon('heroicon-o-user-circle')
-                        ->iconColor('primary')
-                ),
-        ];
-    }
+    // public function tours(): array
+    // {
+    //     return [
+    //         Tour::make('dashboard')
+    //             ->steps(
+    //                 Step::make()
+    //                     ->title("Welcome to your Project Management System!"),
+    //                 Step::make('.fi-avatar')
+    //                     ->title('Woaw ! Here is your avatar !')
+    //                     ->description('You look nice !')
+    //                     ->icon('heroicon-o-user-circle')
+    //                     ->iconColor('primary')
+    //             ),
+    //     ];
+    // }
 }

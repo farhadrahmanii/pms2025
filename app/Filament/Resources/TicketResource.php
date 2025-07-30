@@ -33,7 +33,7 @@ class TicketResource extends Resource
 
     protected static function getNavigationLabel(): string
     {
-        return __('Tasks');
+        return __('تمام کارها ');
     }
 
     public static function getPluralLabel(): ?string
@@ -41,10 +41,10 @@ class TicketResource extends Resource
         return static::getNavigationLabel();
     }
 
-    protected static function getNavigationGroup(): ?string
-    {
-        return __('Management');
-    }
+    // protected static function getNavigationGroup(): ?string
+    // {
+    //     return __('Management');
+    // }
 
     public static function form(Form $form): Form
     {
@@ -86,47 +86,45 @@ class TicketResource extends Resource
                                     )
                                     ->default(fn() => request()->get('project'))
                                     ->required(),
-                                Forms\Components\Select::make('epic_id')
-                                    ->label(__('Epic'))
-                                    ->searchable()
-                                    ->reactive()
-                                    ->options(function ($get, $set) {
-                                        return Epic::where('project_id', $get('project_id'))->pluck('name', 'id')->toArray();
-                                    }),
+                                    Forms\Components\TextInput::make('name')
+                                            ->label(__('Ticket name'))
+                                            ->required()
+                                            ->maxLength(255),
+                                // Forms\Components\Select::make('epic_id')
+                                //     ->label(__('Epic'))
+                                //     ->searchable()
+                                //     ->reactive()
+                                //     ->options(function ($get, $set) {
+                                //         return Epic::where('project_id', $get('project_id'))->pluck('name', 'id')->toArray();
+                                //     }),
                                 Forms\Components\Grid::make()
-                                    ->columns(12)
-                                    ->columnSpan(2)
+                                    ->columns(3)
                                     ->schema([
                                         Forms\Components\TextInput::make('code')
                                             ->label(__('Ticket code'))
                                             ->visible(fn($livewire) => !($livewire instanceof CreateRecord))
-                                            ->columnSpan(2)
+                                            ->columnSpan(4)
                                             ->disabled(),
 
-                                        Forms\Components\TextInput::make('name')
-                                            ->label(__('Ticket name'))
-                                            ->required()
-                                            ->columnSpan(
-                                                fn($livewire) => !($livewire instanceof CreateRecord) ? 10 : 12
-                                            )
-                                            ->maxLength(255),
+                                        
+                                            Forms\Components\Select::make('owner_id')
+                                                ->label(__('Ticket owner'))
+                                                ->searchable()
+                                                ->options(fn() => User::all()->pluck('name', 'id')->toArray())
+                                                ->default(fn() => auth()->user()->id)
+                                                ->required(),
+                                                Forms\Components\Select::make('responsible_id')
+                                                    ->label(__('Ticket responsible'))
+                                                    ->searchable()
+                                                    ->options(fn() => User::all()->pluck('name', 'id')->toArray()),
+                                                Forms\Components\DatePicker::make('end_date')
+                                                    ->label(__('End date'))
+                                                    ->required(fn($livewire) => $livewire instanceof EditRecord)
+                                                    ->columnSpan(1),
+                                                    
                                     ]),
 
-                                Forms\Components\Select::make('owner_id')
-                                    ->label(__('Ticket owner'))
-                                    ->searchable()
-                                    ->options(fn() => User::all()->pluck('name', 'id')->toArray())
-                                    ->default(fn() => auth()->user()->id)
-                                    ->required(),
 
-                                Forms\Components\Select::make('responsible_id')
-                                    ->label(__('Ticket responsible'))
-                                    ->searchable()
-                                    ->options(fn() => User::all()->pluck('name', 'id')->toArray()),
-                                Forms\Components\DatePicker::make('end_date')
-                                    ->label(__('End date'))
-                                    ->required(fn($livewire) => $livewire instanceof EditRecord)
-                                    ->columnSpan(1),
                                 Forms\Components\Grid::make()
                                     ->columns(3)
                                     ->columnSpan(2)
@@ -171,12 +169,15 @@ class TicketResource extends Resource
                                             ->default(fn() => TicketType::where('is_default', true)->first()?->id)
                                             ->required(),
 
-                                        Forms\Components\Select::make('priority_id')
-                                            ->label(__('Ticket priority'))
-                                            ->searchable()
-                                            ->options(fn() => TicketPriority::all()->pluck('name', 'id')->toArray())
-                                            ->default(fn() => TicketPriority::where('is_default', true)->first()?->id)
-                                            ->required(),
+                                        // Forms\Components\Select::make('priority_id')
+                                        //     ->label(__('Ticket priority'))
+                                        //     ->searchable()
+                                        //     ->options(fn() => TicketPriority::all()->pluck('name', 'id')->toArray())
+                                        //     ->default(fn() => TicketPriority::where('is_default', true)->first()?->id)
+                                        //     ->required(),
+                                        Forms\Components\TextInput::make('estimation')
+                                        ->label(__('Estimation time By Hour'))
+                                        ->numeric(),
                                     ]),
                             ]),
 
@@ -189,10 +190,7 @@ class TicketResource extends Resource
                             ->columnSpan(2)
                             ->columns(12)
                             ->schema([
-                                Forms\Components\TextInput::make('estimation')
-                                    ->label(__('Estimation time By Hour'))
-                                    ->numeric()
-                                    ->columnSpan(2),
+                              
                             ]),
 
                         Forms\Components\Repeater::make('relations')

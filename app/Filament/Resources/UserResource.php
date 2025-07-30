@@ -70,7 +70,10 @@ class UserResource extends Resource
                                     ->maxLength(255)
                                     ->helperText('Leave blank if you don\'t want to change the password')
                                 ,
-
+                                Forms\Components\Toggle::make('is_active')
+                                    ->label(__('User enabled'))
+                                    ->default(true)
+                                    ->helperText(__('Enable or disable this user account')),
                                 Forms\Components\CheckboxList::make('roles')
                                     ->label(__('Permission roles'))
                                     ->columns(3)
