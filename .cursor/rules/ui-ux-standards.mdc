@@ -1,0 +1,182 @@
+# UI/UX Design Standards
+
+## Light/Dark Mode Support
+
+### Container Styling
+```blade
+<!-- ✅ Proper light/dark mode containers -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+    <h2 class="text-black dark:text-white text-xl font-semibold mb-4">
+        {{ __('Title') }}
+    </h2>
+    <p class="text-gray-700 dark:text-gray-300">
+        {{ __('Content') }}
+    </p>
+</div>
+```
+
+### Text Colors
+- **Headers**: `text-black dark:text-white`
+- **Body text**: `text-gray-700 dark:text-gray-300`
+- **Muted text**: `text-gray-500 dark:text-gray-400`
+- **Links**: `text-blue-600 dark:text-blue-400`
+
+### Form Elements
+```blade
+<!-- ✅ Form inputs with proper contrast -->
+<input 
+    type="text" 
+    class="bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 
+           text-black dark:text-white rounded-md shadow-sm"
+    wire:model="searchTerm"
+>
+```
+
+## Summary Cards
+
+### Card Design Pattern
+```blade
+<!-- ✅ Summary card with gradient/light mode support -->
+<div class="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 
+            bg-blue-50 dark:bg-blue-900 rounded-lg p-6 shadow-lg">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-blue-100 dark:text-blue-200 text-sm font-medium">
+                {{ __('Total Tasks') }}
+            </p>
+            <p class="text-white dark:text-white text-2xl font-bold">
+                {{ $summary['total_tickets'] }}
+            </p>
+        </div>
+        <div class="text-blue-100 dark:text-blue-200">
+            📊
+        </div>
+    </div>
+</div>
+```
+
+### Light Mode Cards
+```blade
+<!-- ✅ Light mode specific styling -->
+<div class="bg-blue-50 dark:bg-gradient-to-br dark:from-blue-500 dark:to-blue-600 
+            rounded-lg p-6 shadow-lg">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-blue-700 dark:text-blue-100 text-sm font-medium">
+                {{ __('Total Tasks') }}
+            </p>
+            <p class="text-blue-900 dark:text-white text-2xl font-bold">
+                {{ $summary['total_tickets'] }}
+            </p>
+        </div>
+    </div>
+</div>
+```
+
+## Table Styling
+
+### Data Tables
+```blade
+<!-- ✅ Responsive table with proper styling -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead class="bg-gray-50 dark:bg-gray-700">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 
+                               uppercase tracking-wider">
+                        {{ __('Name') }}
+                    </th>
+                    <!-- More headers -->
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                @foreach($items as $item)
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                        {{ $item->name }}
+                    </td>
+                    <!-- More cells -->
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+```
+
+## Button Styling
+
+### Action Buttons
+```blade
+<!-- ✅ Primary action button -->
+<button 
+    wire:click="exportExcel" 
+    wire:loading.attr="disabled"
+    class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 
+           dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium 
+           rounded-md shadow-sm transition-colors duration-200
+           disabled:opacity-50 disabled:cursor-not-allowed">
+    <span wire:loading.remove wire:target="exportExcel">📥</span>
+    <span wire:loading wire:target="exportExcel">🔄</span>
+    {{ __('Export Excel') }}
+</button>
+```
+
+### Filter Buttons
+```blade
+<!-- ✅ Secondary filter button -->
+<button 
+    wire:click="loadData" 
+    wire:loading.attr="disabled"
+    class="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 
+           dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 
+           font-medium rounded-md shadow-sm transition-colors duration-200">
+    🔍 {{ __('Filter') }}
+</button>
+```
+
+## Loading States
+
+### Button Loading
+- Use `wire:loading.attr="disabled"` on action buttons
+- Show loading spinners with `wire:loading` and `wire:loading.remove`
+- Use emoji icons for loading states: 🔄
+
+### Page Loading
+- Avoid complex loading flags
+- Let Livewire handle loading states naturally
+- Provide immediate feedback for user actions
+
+## Responsive Design
+
+### Grid Layouts
+```blade
+<!-- ✅ Responsive grid for summary cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+    <!-- Summary cards -->
+</div>
+
+<!-- ✅ Responsive table container -->
+<div class="overflow-x-auto">
+    <table class="min-w-full">
+        <!-- Table content -->
+    </table>
+</div>
+```
+
+## Icon Usage
+
+### Emoji Icons
+- Use universal emoji icons for compatibility
+- Common icons: 🔄 (refresh), 📥 (download), 🔍 (search), ✅ (success), ❌ (error)
+- Avoid Heroicon components that may not be available
+
+### Icon Placement
+- Place icons before text in buttons
+- Use consistent icon sizing
+- Ensure proper contrast in both themes
+description:
+globs:
+alwaysApply: false
+---

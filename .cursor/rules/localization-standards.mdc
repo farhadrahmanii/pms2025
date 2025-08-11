@@ -1,0 +1,46 @@
+# Localization Standards
+
+## Persian Translation Guidelines
+
+### Key Translation Rules
+- **"کار" → "وظیفه"**: Always translate "work/ticket" as "وظیفه" (task/duty)
+- **"کاربر" → "وظیفه"**: In context of tasks, use "وظیفه" not "کاربر"
+- **Consistency**: Maintain consistent terminology across all files
+
+### Translation Files
+- **Primary**: [resources/lang/fa.json](mdc:resources/lang/fa.json) - Persian translations
+- **Secondary**: [lang/ps.json](mdc:lang/ps.json) - Pashto translations
+
+### Usage Patterns
+```php
+// ✅ Correct
+{{ __('Create ticket') }}  // "وظیفه ایجاد کنید"
+{{ __('Latest tickets') }} // "آخرین وظیفه ها"
+
+// ❌ Avoid
+{{ __('Create work') }}    // Don't use "کار"
+```
+
+### Common Translations
+- "Create ticket" → "وظیفه ایجاد کنید"
+- "Create New Ticket" → "ایجاد وظیفه جدید"
+- "Latest tickets" → "آخرین وظیفه ها"
+- "My Tasks" → "وظایف من"
+- "All Tasks" → "همه وظایف"
+
+### File Updates Required
+When adding new translatable strings:
+1. Add to [resources/lang/fa.json](mdc:resources/lang/fa.json)
+2. Add to [lang/ps.json](mdc:lang/ps.json) if needed
+3. Use `__()` helper in PHP/Blade files
+4. Test both languages
+
+### UI Components
+- All user-facing text must be translatable
+- Form labels, buttons, headers, messages
+- Error messages and notifications
+- Table headers and data labels
+description:
+globs:
+alwaysApply: false
+---

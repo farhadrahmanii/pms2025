@@ -81,7 +81,7 @@
             class="bg-blue-50 dark:bg-gradient-to-br dark:from-blue-500 dark:to-blue-600 rounded-lg p-6 shadow-lg border border-blue-200 dark:border-transparent">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-blue-700 dark:text-blue-100 text-sm font-medium">کل تیکت‌ها</p>
+                    <p class="text-blue-700 dark:text-blue-100 text-sm font-medium">کل واظیف‌ها</p>
                     <p class="text-blue-900 dark:text-white text-2xl font-bold">{{ $summary['total_tickets'] ?? 0 }}</p>
                 </div>
                 <span class="text-3xl">🎫</span>
@@ -159,7 +159,7 @@
         class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
             <h2 class="text-lg font-semibold text-black dark:text-white">
-                لیست تیکت‌ها ({{ count($report) }} مورد)
+                لیست واظیف‌ها ({{ count($report) }} مورد)
             </h2>
         </div>
 
@@ -170,7 +170,7 @@
                     <tr>
                         <th
                             class="px-6 py-3 text-right text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
-                            نام تیکت
+                            نام واظیف
                         </th>
                         <th
                             class="px-6 py-3 text-right text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
@@ -229,9 +229,9 @@
         @else
         <div class="text-center py-12">
             <span class="text-6xl mb-4 block">📭</span>
-            <h3 class="mt-2 text-sm font-medium text-black dark:text-white">هیچ تیکتی یافت نشد</h3>
+            <h3 class="mt-2 text-sm font-medium text-black dark:text-white">هیچ واظیفی یافت نشد</h3>
             <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                در بازه زمانی انتخاب شده هیچ تیکتی وجود ندارد.
+                در بازه زمانی انتخاب شده هیچ واظیفی وجود ندارد.
             </p>
         </div>
         @endif
@@ -243,7 +243,7 @@
         class="mt-8 bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-red-50 dark:bg-red-900/20">
             <h2 class="text-lg font-semibold text-red-900 dark:text-red-100">
-                تیکت‌های رد شده ({{ $rejectedTickets->count() }} مورد)
+                واظیف‌های رد شده ({{ $rejectedTickets->count() }} مورد)
             </h2>
         </div>
 
@@ -257,7 +257,7 @@
                         </th>
                         <th
                             class="px-6 py-3 text-right text-xs font-medium text-red-700 dark:text-red-300 uppercase tracking-wider">
-                            نام تیکت
+                            نام واظیف
                         </th>
                     </tr>
                 </thead>

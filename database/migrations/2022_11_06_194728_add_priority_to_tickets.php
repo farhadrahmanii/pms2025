@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->foreignId('priority_id')->constrained('ticket_priorities');
+            $table->foreignId('priority_id')->constrained('ticket_priorities')->default(1);
         });
     }
 

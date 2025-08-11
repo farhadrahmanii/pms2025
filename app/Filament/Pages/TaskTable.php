@@ -19,8 +19,8 @@ class TaskTable extends Page implements HasTable
     use InteractsWithTable;
 
     protected static ?string $navigationIcon = 'heroicon-o-ticket';
-    protected static ?string $navigationLabel = 'کارهای من';
-    protected static ?string $title = 'کارهای من';
+    protected static ?string $navigationLabel = 'وظایف من';
+    protected static ?string $title = 'وظایف من';
     protected static ?string $slug = 'my-tasks';
 
     protected static string $view = 'filament.pages.task-table';

@@ -31,9 +31,17 @@ class TicketResource extends Resource
 
     protected static ?int $navigationSort = 2;
 
+    public static function getRouteBaseName(): string
+    {
+        return 'filament.resources.tickets';
+    }
+
+    protected static ?string $modelLabel = 'وظیفه';
+    protected static ?string $pluralModelLabel = 'وظایف';
+
     protected static function getNavigationLabel(): string
     {
-        return __('تمام کارها ');
+        return __('تمام وظایف ');
     }
 
     public static function getPluralLabel(): ?string
@@ -105,8 +113,12 @@ class TicketResource extends Resource
                                             ->visible(fn($livewire) => !($livewire instanceof CreateRecord))
                                             ->columnSpan(4)
                                             ->disabled(),
-
-                                        
+                                        Forms\Components\Select::make('priority_id')
+                                            ->label(__('Ticket priority'))
+                                            ->options(fn() => TicketPriority::all()->pluck('name', 'id')->toArray())
+                                            ->default(fn() => TicketPriority::where('is_default', true)->first()?->id)
+                                            ->hidden()
+                                            ->required(),
                                             Forms\Components\Select::make('owner_id')
                                                 ->label(__('Ticket owner'))
                                                 ->searchable()
@@ -318,25 +330,25 @@ class TicketResource extends Resource
                 ->sortable()
                 ->searchable(),
 
-            Tables\Columns\TextColumn::make('type.name')
-                ->label(__('Type'))
-                ->formatStateUsing(
-                    fn($record) => view('partials.filament.resources.ticket-type', ['state' => $record->type])
-                )
-                ->sortable()
-                ->searchable(),
+            // Tables\Columns\TextColumn::make('type.name')
+            //     ->label(__('Type'))
+            //     ->formatStateUsing(
+            //         fn($record) => view('partials.filament.resources.ticket-type', ['state' => $record->type])
+            //     )
+            //     ->sortable()
+            //     ->searchable(),
 
-            Tables\Columns\TextColumn::make('priority.name')
-                ->label(__('Priority'))
-                ->formatStateUsing(fn($record) => new HtmlString('
-                            <div class="flex items-center gap-2 mt-1">
-                                <span class="filament-tables-color-column relative flex h-6 w-6 rounded-md"
-                                    style="background-color: ' . $record->priority->color . '"></span>
-                                <span>' . $record->priority->name . '</span>
-                            </div>
-                        '))
-                ->sortable()
-                ->searchable(),
+            // Tables\Columns\TextColumn::make('priority.name')
+            //     ->label(__('Priority'))
+            //     ->formatStateUsing(fn($record) => new HtmlString('
+            //                 <div class="flex items-center gap-2 mt-1">
+            //                     <span class="filament-tables-color-column relative flex h-6 w-6 rounded-md"
+            //                         style="background-color: ' . $record->priority->color . '"></span>
+            //                     <span>' . $record->priority->name . '</span>
+            //                 </div>
+            //             '))
+            //     ->sortable()
+            //     ->searchable(),
 
             // Tables\Columns\TextColumn::make('created_at')
             //     ->label(__('Created at'))
@@ -434,7 +446,7 @@ class TicketResource extends Resource
         return [
             'index' => Pages\ListTickets::route('/'),
             'create' => Pages\CreateTicket::route('/create'),
-            'view' => Pages\ViewTicket::route('/{record}'),
+            'view' => Pages\ViewTicket::route('/{record}'), // Add explicit name
             'edit' => Pages\EditTicket::route('/{record}/edit'),
         ];
     }

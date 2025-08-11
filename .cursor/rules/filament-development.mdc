@@ -1,0 +1,122 @@
+# FilamentPHP Development Standards
+
+## Page Development Pattern
+
+### Custom Pages Structure
+- **Location**: `app/Filament/Pages/`
+- **View Location**: `resources/views/filament/pages/`
+- **Example**: [ProjectReport.php](mdc:app/Filament/Pages/ProjectReport.php) and [project-report.blade.php](mdc:resources/views/filament/pages/project-report.blade.php)
+
+### Page Class Structure
+```php
+class CustomPage extends Page
+{
+    use InteractsWithForms;
+    
+    // Properties
+    public $startDate;
+    public $endDate;
+    public $selectedUser;
+    public $selectedProject;
+    
+    // Data collections
+    public $report;
+    public $summary;
+    
+    public function mount()
+    {
+        // Initialize default values
+        $this->startDate = now()->subDays(30)->toDateString();
+        $this->endDate = now()->toDateString();
+        $this->selectedUser = null;
+        $this->selectedProject = null;
+        
+        // Load initial data
+        $this->loadData();
+    }
+    
+    public function loadData()
+    {
+        try {
+            // Build queries with filters
+            // Set data collections
+        } catch (\Exception $e) {
+            // Handle errors gracefully
+        }
+    }
+}
+```
+
+### Blade Template Structure
+```blade
+<x-filament-panels::page>
+    <!-- Filters Section -->
+    <div class="mb-6">
+        <form wire:submit="loadData">
+            <!-- Date inputs, dropdowns, etc. -->
+        </form>
+    </div>
+    
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <!-- Summary cards with proper light/dark mode -->
+    </div>
+    
+    <!-- Data Tables -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+        <!-- Tables with proper styling -->
+    </div>
+</x-filament-panels::page>
+```
+
+## UI/UX Standards
+
+### Light/Dark Mode Support
+- Always include both light and dark mode classes
+- Use `bg-white dark:bg-gray-800` for containers
+- Use `text-black dark:text-white` for text
+- Test both themes
+
+### Loading States
+- Use `wire:loading.attr="disabled"` on buttons
+- Avoid complex loading flags
+- Let Livewire handle loading states naturally
+
+### Error Handling
+- Wrap data loading in try-catch blocks
+- Provide fallback empty data
+- Use Filament notifications for user feedback
+
+## Export Functionality
+
+### Excel Export Pattern
+- **Location**: `app/Exports/`
+- **Example**: [ProjectReportExport.php](mdc:app/Exports/ProjectReportExport.php)
+- Use Maatwebsite/Excel package
+- Implement filtering parameters
+- Include proper styling and formatting
+
+### Export Integration
+```php
+public function exportExcel()
+{
+    return Excel::download(
+        new ProjectReportExport(
+            $this->startDate,
+            $this->endDate,
+            $this->selectedUser,
+            $this->selectedProject
+        ),
+        'project-report-' . now()->format('Y-m-d') . '.xlsx'
+    );
+}
+```
+
+## Icon Usage
+- Replace Heroicon components with emojis for compatibility
+- Use universal emoji icons: 🔄, 📥, 🔍, etc.
+- Avoid `<x-heroicon-o-... />` components
+description:
+globs:
+alwaysApply: false
+---

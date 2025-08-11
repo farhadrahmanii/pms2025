@@ -82,7 +82,9 @@ class ProjectReport extends Page
                 ->with('project');
             
             // Add user filter if user is selected
-           
+           if($this->selectedUser){
+            $query->where('responsible_id', $this->selectedUser);
+           }
             
             // Add project filter if project is selected
             if ($this->selectedProject) {
@@ -198,6 +200,7 @@ class ProjectReport extends Page
             $export = new ProjectReportExport(
                 $this->startDate, 
                 $this->endDate, 
+                $this->selectedUser,
                 $this->selectedProject
             );
             $filename = 'project_report_' . $this->startDate . '_to_' . $this->endDate . '.xlsx';

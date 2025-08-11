@@ -1,0 +1,46 @@
+# Laravel/FilamentPHP Project Structure
+
+This is a Laravel-based project management system (PMS) with FilamentPHP admin panel. The main entry point is [artisan](mdc:artisan).
+
+## Key Directories
+
+### App Structure
+- **`app/Filament/`** - FilamentPHP admin panel components
+  - **`Pages/`** - Custom admin pages (Dashboard, ProjectReport, etc.)
+  - **`Resources/`** - CRUD resources for models
+  - **`Widgets/`** - Dashboard widgets
+- **`app/Models/`** - Eloquent models (Ticket, User, Project, etc.)
+- **`app/Http/Controllers/`** - Laravel controllers
+- **`app/Http/Livewire/`** - Livewire components for dynamic UI
+- **`app/Exports/`** - Excel export classes using Maatwebsite/Excel
+
+### Views and Localization
+- **`resources/views/`** - Blade templates
+  - **`filament/pages/`** - Custom Filament page views
+  - **`partials/`** - Reusable view components
+- **`resources/lang/`** - Localization files
+  - **`fa.json`** - Persian translations (primary language)
+  - **`ps.json`** - Pashto translations
+- **`lang/`** - Additional language files
+
+### Configuration
+- **`config/`** - Laravel configuration files
+- **`database/migrations/`** - Database schema migrations
+- **`database/seeders/`** - Database seeders
+
+## Key Models
+- **Ticket** - Main task/ticket entity
+- **User** - User management
+- **Project** - Project management
+- **Activity** - Activity tracking
+- **Timesheet** - Time logging
+
+## Localization Strategy
+- Persian (fa) is the primary language
+- All user-facing text should be translatable
+- Use `__()` helper for translations
+- Maintain consistency: "کار" → "وظیفه" (work → task)
+description:
+globs:
+alwaysApply: false
+---

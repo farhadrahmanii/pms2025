@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "42b3e6362f50b5a9b1921338a8f9d888",
+    "content-hash": "251d68b1896e979ef82787deaa678aca",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -134,77 +134,6 @@
                 "source": "https://github.com/askerakbar/gpt-trix-editor/tree/1.0.1"
             },
             "time": "2023-04-15T17:03:52+00:00"
-        },
-        {
-            "name": "awcodes/filament-quick-create",
-            "version": "v2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/awcodes/filament-quick-create.git",
-                "reference": "6e358bc629f2787558ed31afe0364365ab6ef0d1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/awcodes/filament-quick-create/zipball/6e358bc629f2787558ed31afe0364365ab6ef0d1",
-                "reference": "6e358bc629f2787558ed31afe0364365ab6ef0d1",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^2.0",
-                "illuminate/contracts": "^9.0|^10.0",
-                "php": "^8.0",
-                "spatie/laravel-package-tools": "^1.9.2"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.0",
-                "nunomaduro/collision": "^6.0|^7.0",
-                "nunomaduro/larastan": "^2.0.1",
-                "orchestra/testbench": "^7.0|^8.0",
-                "pestphp/pest": "^1.21",
-                "pestphp/pest-plugin-laravel": "^1.1",
-                "pestphp/pest-plugin-livewire": "^1.0",
-                "pestphp/pest-plugin-parallel": "^0.3",
-                "phpstan/extension-installer": "^1.1",
-                "phpstan/phpstan-deprecation-rules": "^1.0",
-                "phpstan/phpstan-phpunit": "^1.0",
-                "phpunit/phpunit": "^9.5|^10.0",
-                "spatie/laravel-ray": "^1.26"
-            },
-            "type": "package",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "FilamentQuickCreate\\FilamentQuickCreateServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "FilamentQuickCreate\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Adam Weston",
-                    "email": "awcodes1@gmail.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Plugin for Filament Admin that adds a dropdown menu to the header to quickly create new items.",
-            "keywords": [
-                "filament",
-                "framework",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/awcodes/filament-quick-create/issues",
-                "source": "https://github.com/awcodes/filament-quick-create/tree/v2.1.1"
-            },
-            "time": "2023-03-02T14:06:12+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",

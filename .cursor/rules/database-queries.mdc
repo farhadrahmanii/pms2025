@@ -1,0 +1,136 @@
+# Database Query Standards
+
+## Eloquent Query Patterns
+
+### Base Query Structure
+```php
+// ✅ Recommended pattern for filtered reports
+$query = Ticket::whereBetween('updated_at', [
+    $this->startDate . ' 00:00:00', 
+    $this->endDate . ' 23:59:59'
+])
+->with(['project', 'owner', 'responsible', 'status', 'priority', 'type']);
+
+// Add conditional filters
+if ($this->selectedUser) {
+    $user = User::find($this->selectedUser);
+    if ($user) {
+        $query->where('responsible_id', $user->id);
+    }
+}
+
+if ($this->selectedProject) {
+    $query->where('project_id', $this->selectedProject);
+}
+
+$results = $query->get();
+```
+
+### Relationship Loading
+- Use `with()` to eager load relationships
+- Avoid N+1 query problems
+- Load only necessary relationships
+
+### Date Range Queries
+```php
+// ✅ Proper date range with time
+->whereBetween('updated_at', [
+    $startDate . ' 00:00:00', 
+    $endDate . ' 23:59:59'
+])
+
+// ❌ Avoid
+->whereBetween('updated_at', [$startDate, $endDate])
+```
+
+### Conditional Filtering
+```php
+// ✅ Safe conditional filtering
+if ($this->selectedUser) {
+    $user = User::find($this->selectedUser);
+    if ($user) {
+        $query->where('responsible_id', $user->id);
+    }
+}
+
+// ✅ Multiple user conditions
+$query->where(function ($q) use ($user) {
+    $q->where('owner_id', $user->id)
+        ->orWhere('responsible_id', $user->id);
+});
+```
+
+## Error Handling
+
+### Query Error Handling
+```php
+public function loadData()
+{
+    try {
+        // Build and execute queries
+        $this->report = $query->get();
+        $this->summary = $this->calculateSummary();
+    } catch (\Exception $e) {
+        // Provide fallback data
+        $this->report = collect();
+        $this->summary = [
+            'total_tickets' => 0,
+            'todo_tickets' => 0,
+            // ... other defaults
+        ];
+    }
+}
+```
+
+## Performance Considerations
+
+### Query Optimization
+- Use `select()` to limit columns when possible
+- Use `whereHas()` for relationship filtering
+- Use `withCount()` for counting relationships
+- Avoid `get()` on large datasets without pagination
+
+### Summary Calculations
+```php
+// ✅ Efficient summary calculation
+$this->summary = [
+    'total_tickets' => $this->report->count(),
+    'todo_tickets' => $this->report->where('approved', 1)->count(),
+    'pending_tickets' => $this->report->where('approved', 0)->count(),
+    'rejected_tickets' => $this->report->where('approved', -1)->count(),
+];
+```
+
+## Export Queries
+
+### Export-Specific Patterns
+- Use same filtering logic as display queries
+- Include all necessary relationships for export
+- Consider memory usage for large exports
+- Use chunking for very large datasets
+
+```php
+// Export query should match display query
+public function collection(): Collection
+{
+    $query = Ticket::whereBetween('updated_at', [
+        $this->startDate . ' 00:00:00', 
+        $this->endDate . ' 23:59:59'
+    ])
+    ->with(['project', 'owner', 'responsible', 'status', 'priority', 'type']);
+    
+    if ($this->projectId) {
+        $query->where('project_id', $this->projectId);
+    }
+    
+    if ($this->userId) {
+        $query->where('responsible_id', $this->userId);
+    }
+    
+    return $query->get();
+}
+```
+description:
+globs:
+alwaysApply: false
+---

@@ -21,14 +21,14 @@ class ProjectReportExport implements FromCollection, WithHeadings, WithMapping, 
 {
     protected $startDate;
     protected $endDate;
-    protected $userId;
+    protected $selectedUser;
     protected $projectId;
 
-    public function __construct($startDate, $endDate, $userId = null, $projectId = null)
+    public function __construct($startDate, $endDate, $selectedUser = null, $projectId = null)
     {
         $this->startDate = $startDate;
         $this->endDate = $endDate;
-        $this->userId = $userId ?? auth()->id();
+        $this->selectedUser = $selectedUser ?? auth()->id();
         $this->projectId = $projectId;
     }
 
@@ -110,8 +110,7 @@ class ProjectReportExport implements FromCollection, WithHeadings, WithMapping, 
     public function collection(): Collection
     {
         // Build base query - show all users' tasks, not just current user
-        $query = Ticket::whereBetween('updated_at', [$this->startDate . ' 00:00:00', $this->endDate . ' 23:59:59'])
-            ->with(['project', 'owner', 'responsible', 'status', 'priority', 'type', 'epic', 'sprint']);
+        $query = Ticket::whereBetween('updated_at', [$this->startDate . ' 00:00:00', $this->endDate . ' 23:59:59']);
         
         // Add project filter if project is specified
         if ($this->projectId) {
@@ -119,8 +118,8 @@ class ProjectReportExport implements FromCollection, WithHeadings, WithMapping, 
         }
         
         // Add user filter if user is specified
-        if ($this->userId) {
-            $query->where('responsible_id', $this->userId);
+        if ($this->selectedUser) {
+            $query->where('responsible_id', $this->selectedUser);
         }
         
         return $query->get();

@@ -11,6 +11,7 @@ class TicketHoursExport implements FromCollection, WithHeadings
 {
     public Ticket $ticket;
 
+ 
     public function __construct(Ticket $ticket)
     {
         $this->ticket = $ticket;
